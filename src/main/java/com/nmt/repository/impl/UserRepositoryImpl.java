@@ -1,6 +1,5 @@
 package com.nmt.repository.impl;
 
-import com.nmt.model.Faculty;
 import com.nmt.model.User;
 import com.nmt.repository.UserRepository;
 import java.util.ArrayList;
@@ -77,6 +76,28 @@ public class UserRepositoryImpl implements UserRepository{
     public User getUserById(int id) {
          Session s = this.factory.getObject().getCurrentSession();
          return s.get(User.class, id);
+    }
+
+    @Override
+    public boolean deleteUser(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            User t = this.getUserById(id);
+            s.delete(t);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("From User Where username=:un");
+        q.setParameter("un", username);
+        
+        return (User) q.getSingleResult();
     }
     
 }

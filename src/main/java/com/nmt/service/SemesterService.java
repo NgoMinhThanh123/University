@@ -6,11 +6,16 @@ package com.nmt.service;
 
 import com.nmt.model.Semester;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author acer
  */
 public interface SemesterService {
-    List<Semester> getSemesters();
+    List<Semester> getSemesters(Map<String, String> params);
+    boolean addSemester(Semester m);
+    boolean updateSemester(Semester m);
+    Semester getSemesterById(String id);
+    boolean deleteSemester(String id);
 }

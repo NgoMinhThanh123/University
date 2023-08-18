@@ -79,4 +79,17 @@ public class MajorRepositoryImpl implements MajorRepository{
             return false;
         }
     }
+
+    @Override
+    public boolean deleteMajor(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            Major m = this.getMajorById(id);
+            s.delete(m);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }

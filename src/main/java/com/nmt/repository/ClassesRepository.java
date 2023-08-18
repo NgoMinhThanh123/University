@@ -14,4 +14,8 @@ import java.util.Map;
  */
 public interface ClassesRepository {
     List<Classes> getClasses(Map<String, String> params);
+    boolean addClass(Classes c);
+    boolean updateClass(Classes c);
+    Classes getClassById(String id);
+    boolean deleteClass(String id);
 }

@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -17,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,31 +41,37 @@ public class Subject implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
+    @NotNull(message = "{subject.id.notNullMsg}")
+    @Size(min = 1, max = 12, message = "{subject.id.lenErrMsg}")
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @NotNull(message = "{subject.name.notNullMsg}")
+    @Size(min = 1, max = 45, message = "{subject.name.lenErrMsg}")
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{subject.credit.notNullMsg}")
     @Column(name = "credit")
     private int credit;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<SubjectSemester> subjectSemesterSet;
-    @JoinColumn(name = "falculty_id", referencedColumnName = "id")
+    @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Faculty falcultyId;
+    @JsonIgnore
+    private Faculty facultyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<Score> scoreSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<LecturerSubject> lecturerSubjectSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<StudentSubject> studentSubjectSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<ClassesSubject> classesSubjectSet;
 
     public Subject() {
@@ -112,12 +120,12 @@ public class Subject implements Serializable {
         this.subjectSemesterSet = subjectSemesterSet;
     }
 
-    public Faculty getFalcultyId() {
-        return falcultyId;
+    public Faculty getFacultyId() {
+        return facultyId;
     }
 
-    public void setFalcultyId(Faculty falcultyId) {
-        this.falcultyId = falcultyId;
+    public void setFacultyId(Faculty facultyId) {
+        this.facultyId = facultyId;
     }
 
     @XmlTransient

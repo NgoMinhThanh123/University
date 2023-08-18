@@ -14,4 +14,8 @@ import java.util.Map;
  */
 public interface SubjectService {
     List<Subject> getSubjects(Map<String, String> params);
+    boolean addSubject(Subject c);
+    boolean updateSubject(Subject c);
+    Subject getSubjectById(String id);
+    boolean deleteSubject(String id);
 }

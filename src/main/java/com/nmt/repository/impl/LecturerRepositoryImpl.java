@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.nmt.repository.LecturerRepository;
 import java.util.ArrayList;
 import javax.persistence.criteria.Predicate;
+import org.hibernate.HibernateException;
 import org.springframework.core.env.Environment;
 
 /**
@@ -73,6 +74,46 @@ public class LecturerRepositoryImpl implements LecturerRepository {
         Query q = s.createQuery("SELECT COUNT(*) FROM Lecturer");
 
         return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public boolean addLeturer(Lecturer l) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.save(l);
+
+        return true;
+    }
+
+    @Override
+    public boolean updateLeturer(Lecturer l) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.update(l);
+
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Lecturer getLecturerById(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(Lecturer.class, id);
+    }
+
+    @Override
+    public boolean deleteLecturer(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            Lecturer l = this.getLecturerById(id);
+            s.delete(l);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
 }

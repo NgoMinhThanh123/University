@@ -14,5 +14,9 @@ import java.util.Map;
  */
 public interface LecturerRepository {
     List<Lecturer> getLecturers(Map<String, String> params);
+    boolean addLeturer(Lecturer l);
+    boolean updateLeturer(Lecturer l);
+    Lecturer getLecturerById(String id);
     int countLecturers();
+    boolean deleteLecturer(String id);
 }

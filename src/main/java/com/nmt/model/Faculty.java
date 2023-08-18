@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -15,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,24 +38,29 @@ public class Faculty implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+    @NotNull(message = "{faculty.id.notNullMsg}")
+    @Size(min = 1, max = 10, message = "{faculty.id.lenErrMsg}")
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @NotNull(message = "{faculty.name.notNullMsg}")
+    @Size(min = 1, max = 100, message = "{faculty.name.lenErrMsg}")
     @Column(name = "name")
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
+    @JsonIgnore
     private Set<Student> studentSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "falcultyId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
+    @JsonIgnore
     private Set<Subject> subjectSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
+    @JsonIgnore
     private Set<Classes> classesSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
+    @JsonIgnore
     private Set<Lecturer> lecturerSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
+    @JsonIgnore
     private Set<Major> majorSet;
 
     public Faculty() {

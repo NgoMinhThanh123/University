@@ -25,5 +25,25 @@ public class StudentServiceImpl implements StudentService{
     public List<Student> getStudents(Map<String, String> params) {
         return this.studentRepo.getStudents(params);
     }
+
+    @Override
+    public boolean addStudent(Student c) {
+        return this.studentRepo.addStudent(c);
+    }
+
+    @Override
+    public boolean updateStudent(Student c) {
+        return this.studentRepo.updateStudent(c);
+    }
+
+    @Override
+    public Student getStudentById(String id) {
+        return this.studentRepo.getStudentById(id);
+    }
+
+    @Override
+    public boolean deleteStudent(String id) {
+        return this.studentRepo.deleteStudent(id);
+    }
     
 }

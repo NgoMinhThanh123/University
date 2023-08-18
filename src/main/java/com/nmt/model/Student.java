@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -20,10 +21,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -45,17 +48,18 @@ public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+    @NotNull(message = "{student.id.notNullMsg}")
+    @Size(max = 10, message = "{student.id.lenErrMsg}")
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @NotNull(message = "{student.name.notNullMsg}")
+    @Size(max = 100, message = "{student.name.lenErrMsg}")
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{student.birthday.notNullMsg}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
@@ -65,30 +69,35 @@ public class Student implements Serializable {
     private short gender;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 11)
+    @NotNull(message = "{student.phone.notNullMsg}")
+    @Size(max = 10, message = "{student.phone.lenErrMsg}")
     @Column(name = "phone")
     private String phone;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 255, message = "{student.adress.lenErrMsg}")
     @Column(name = "address")
     private String address;
     @JoinColumn(name = "classes_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Classes classesId;
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Faculty facultyId;
     @JoinColumn(name = "major_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Major majorId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    @JsonIgnore
     private Set<Score> scoreSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    @JsonIgnore
     private Set<StudentSubject> studentSubjectSet;
 
     public Student() {

@@ -4,11 +4,10 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,14 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -46,17 +45,18 @@ public class Lecturer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+    @NotNull(message = "{lecturer.id.notNullMsg}")
+    @Size(max = 10, message = "{lecturer.id.lenErrMsg}")
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @NotNull(message = "{lecturer.name.notNullMsg}")
+    @Size(max = 100, message = "{lecturer.name.lenErrMsg}")
     @Column(name = "name")
     private String name;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{lecturer.birthday.notNullMsg}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
@@ -66,29 +66,28 @@ public class Lecturer implements Serializable {
     private short gender;
     // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
+    @NotNull(message = "{lecturer.phone.lenErrMsg}")
+    @Size(max = 10, message = "{lecturer.phone.lenErrMsg}")
     @Column(name = "phone")
     private String phone;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 255, message = "{lecturer.adress.lenErrMsg}")
     @Column(name = "address")
     private String address;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @NotNull(message = "{lecturer.email.notNullMsg}")
+    @Size(min = 15, max = 50, message = "{lecturer.email.lenErrMsg=}")
     @Column(name = "email")
     private String email;
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Faculty facultyId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecturerId")
-    private Set<LecturerSubject> lecturerSubjectSet;
 
     public Lecturer() {
     }
@@ -177,15 +176,6 @@ public class Lecturer implements Serializable {
 
     public void setUserId(User userId) {
         this.userId = userId;
-    }
-
-    @XmlTransient
-    public Set<LecturerSubject> getLecturerSubjectSet() {
-        return lecturerSubjectSet;
-    }
-
-    public void setLecturerSubjectSet(Set<LecturerSubject> lecturerSubjectSet) {
-        this.lecturerSubjectSet = lecturerSubjectSet;
     }
 
     @Override

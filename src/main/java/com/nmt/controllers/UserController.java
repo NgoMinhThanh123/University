@@ -24,10 +24,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class UserController {
-
     @Autowired
     private UserService userService;
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
     @GetMapping("/user")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("user", this.userService.getUsers(params));
@@ -51,13 +54,11 @@ public class UserController {
     @PostMapping("/add_user")
     public String add(@ModelAttribute(value = "add_user") @Valid User u,
             BindingResult rs) {
-
-        if (!rs.hasErrors()) {
+        if(!rs.hasErrors()){
             if (this.userService.addOrUpdateUser(u) == true) {
                 return "redirect:/user";
             }
         }
-
         return "add_user";
     }
 }

@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
  * @author acer
  */
 @Service
-public class SubjectServiceImpl implements SubjectService{
+public class SubjectServiceImpl implements SubjectService {
+
     @Autowired
     private SubjectRepository subjectRepo;
 
@@ -25,5 +26,25 @@ public class SubjectServiceImpl implements SubjectService{
     public List<Subject> getSubjects(Map<String, String> params) {
         return this.subjectRepo.getSubjects(params);
     }
-    
+
+    @Override
+    public boolean addSubject(Subject c) {
+        return this.subjectRepo.addSubject(c);
+    }
+
+    @Override
+    public boolean updateSubject(Subject c) {
+        return this.subjectRepo.updateSubject(c);
+    }
+
+    @Override
+    public Subject getSubjectById(String id) {
+        return this.subjectRepo.getSubjectById(id);
+    }
+
+    @Override
+    public boolean deleteSubject(String id) {
+        return this.subjectRepo.deleteSubject(id);
+    }
+
 }

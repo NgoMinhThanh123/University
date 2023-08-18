@@ -5,7 +5,6 @@
 package com.nmt.repository.impl;
 
 import com.nmt.model.Faculty;
-import com.nmt.model.Lecturer;
 import com.nmt.repository.FacultyRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -28,7 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class FacultyRepositoryImpl implements FacultyRepository{
+public class FacultyRepositoryImpl implements FacultyRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
     @Autowired
@@ -58,5 +59,47 @@ public class FacultyRepositoryImpl implements FacultyRepository{
 
         return query.getResultList();
     }
-    
+
+
+    @Override
+    public Faculty getFacultyById(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(Faculty.class, id);
+    }
+
+    @Override
+    public boolean addFaculty(Faculty f) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.save(f);
+
+        return true;
+    }
+
+    @Override
+    public boolean updateFaculty(Faculty f) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            s.update(f);
+
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteFaculty(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            Faculty f = this.getFacultyById(id);
+            s.delete(f);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+
 }

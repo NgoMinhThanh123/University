@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -42,14 +43,18 @@ public class Score implements Serializable {
     private Integer id;
     @JoinColumn(name = "semester_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Semester semesterId;
     @JoinColumn(name = "student_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Student studentId;
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Subject subjectId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "scoreId")
+    @JsonIgnore
     private Set<ScoreValue> scoreValueSet;
 
     public Score() {

@@ -6,16 +6,9 @@ package com.nmt.service.impl;
 
 import com.nmt.model.Lecturer;
 import com.nmt.repository.LecturerRepository;
-import com.nmt.service.LecturerService;;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.nmt.service.LecturerService;
 import org.springframework.stereotype.Service;
-import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author acer
  */
+
+
 @Service
-public class LectureServiceImpl implements LecturerService{
+public class LectureServiceImpl implements LecturerService {
+
     @Autowired
     private LecturerRepository lecturersRepo;
 
@@ -37,5 +33,26 @@ public class LectureServiceImpl implements LecturerService{
     public int countLecturers() {
         return this.lecturersRepo.countLecturers();
     }
-    
+
+    @Override
+    public boolean addLeturer(Lecturer l) {
+        return this.lecturersRepo.addLeturer(l);
+    }
+
+    @Override
+    public boolean updateLeturer(Lecturer l) {
+        return this.lecturersRepo.updateLeturer(l);
+    }
+
+    @Override
+    public Lecturer getLecturerById(String id) {
+        return this.lecturersRepo.getLecturerById(id);
+    }
+
+    @Override
+    public boolean deleteLecturer(String id) {
+        return this.lecturersRepo.deleteLecturer(id);
+
+    }
+
 }

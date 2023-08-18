@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -17,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,16 +39,19 @@ public class Classes implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{notNullMsg}")
     @Size(min = 1, max = 8)
     @Column(name = "id")
     private String id;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classesId")
+    @JsonIgnore
     private Set<Student> studentSet;
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Faculty facultyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classId")
+    @JsonIgnore
     private Set<ClassesSubject> classesSubjectSet;
 
     public Classes() {

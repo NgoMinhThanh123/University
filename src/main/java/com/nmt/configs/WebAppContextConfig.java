@@ -6,7 +6,10 @@ package com.nmt.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.nmt.formatters.ClassFormatter;
 import com.nmt.formatters.FacultyFormatter;
+import com.nmt.formatters.MajorFormatter;
+import com.nmt.formatters.UserFormatter;
 import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -23,9 +26,8 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 /**
  *
@@ -41,32 +43,17 @@ import org.springframework.web.servlet.view.JstlView;
 })
 @PropertySource("classpath:configs.properties")
 public class WebAppContextConfig implements WebMvcConfigurer {
-    @Autowired
-    private Environment env;
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
     
-    
-//    @Bean
-//    public InternalResourceViewResolver internalResourceViewResolver() {
-//        InternalResourceViewResolver r = new InternalResourceViewResolver();
-//        r.setViewClass(JstlView.class);
-//        r.setPrefix("/WEB-INF/pages/");
-//        r.setSuffix(".jsp");
-//        
-//        return r;
-//    }
-    
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new FacultyFormatter());
-    }
-    
-    @Bean
-    public SimpleDateFormat simpleDateFormat() {
-        return new SimpleDateFormat("yyyy-MM-dd");
+        registry.addFormatter(new UserFormatter());
+        registry.addFormatter(new MajorFormatter());
+        registry.addFormatter(new ClassFormatter());
     }
     
     @Bean
@@ -98,14 +85,9 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         return validator();
     }
     
-      @Bean
-    public Cloudinary cloudinary() {
-        Cloudinary cloudinary
-                = new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", this.env.getProperty("cloudinary.cloud_name"),
-                        "api_key", this.env.getProperty("cloudinary.api_key"),
-                        "api_secret", this.env.getProperty("cloudinary.api_secret"),
-                        "secure", true));
-        return cloudinary;
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
     }
+    
 }

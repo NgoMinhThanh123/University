@@ -13,5 +13,10 @@ import java.util.Map;
  * @author acer
  */
 public interface StudentService {
+
     List<Student> getStudents(Map<String, String> params);
+    boolean addStudent(Student c);
+    boolean updateStudent(Student c);
+    Student getStudentById(String id);
+    boolean deleteStudent(String id);
 }

@@ -8,6 +8,7 @@ import com.nmt.model.Semester;
 import com.nmt.repository.SemesterRepository;
 import com.nmt.service.SemesterService;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,32 @@ import org.springframework.stereotype.Service;
  * @author acer
  */
 @Service
-public class SemesterServiceImpl implements SemesterService{
+public class SemesterServiceImpl implements SemesterService {
     @Autowired
-    private SemesterRepository semesterRepo;
+    private SemesterRepository semesRepo;
 
     @Override
-    public List<Semester> getSemesters() {
-        return this.semesterRepo.getSemesters();
+    public List<Semester> getSemesters(Map<String, String> params) {
+       return this.semesRepo.getSemesters(params);
     }
-    
+
+    @Override
+    public Semester getSemesterById(String id) {
+        return this.semesRepo.getSemesterById(id);
+    }
+
+    @Override
+    public boolean addSemester(Semester c) {
+        return this.semesRepo.addSemester(c);
+    }
+
+    @Override
+    public boolean updateSemester(Semester c) {
+        return this.semesRepo.updateSemester(c);
+    }
+
+    @Override
+    public boolean deleteSemester(String id) {
+        return this.semesRepo.deleteSemester(id);
+    }
 }

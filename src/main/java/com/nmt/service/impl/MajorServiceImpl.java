@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
  * @author acer
  */
 @Service
-public class MajorServiceImpl implements MajorService{
+public class MajorServiceImpl implements MajorService {
+
     @Autowired
     private MajorRepository majorRepo;
 
@@ -26,7 +27,6 @@ public class MajorServiceImpl implements MajorService{
         return this.majorRepo.getMajors(params);
     }
 
-
     @Override
     public Major getMajorById(String id) {
         return this.majorRepo.getMajorById(id);
@@ -34,18 +34,17 @@ public class MajorServiceImpl implements MajorService{
 
     @Override
     public boolean addMajor(Major m) {
-        if(m != null)
-            return this.majorRepo.addMajor(m);
-        else
-            throw new RuntimeException("Update thất bại!");   
+        return this.majorRepo.addMajor(m);
     }
 
     @Override
     public boolean updateMajor(Major m) {
-        if(m != null)
-            return this.majorRepo.updateMajor(m);
-        else
-            throw new RuntimeException("Update thất bại!");        
+        return this.majorRepo.updateMajor(m);
+
     }
- 
+
+    @Override
+    public boolean deleteMajor(String id) {
+        return this.majorRepo.deleteMajor(id);
+    }
 }

@@ -17,6 +17,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.nmt.repository.StudentRepository;
+import org.hibernate.HibernateException;
 
 /**
  *
@@ -32,10 +33,9 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Autowired
     private Environment env;
 
-
     @Override
     public List<Student> getStudents(Map<String, String> params) {
-        
+
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Student> q = b.createQuery(Student.class);
@@ -55,7 +55,6 @@ public class StudentRepositoryImpl implements StudentRepository {
                 predicates.add(b.like(root.get("id"), String.format("%%%s%%", mssv)));
             }
 
-
             q.where(predicates.toArray(Predicate[]::new));
         }
 
@@ -73,6 +72,54 @@ public class StudentRepositoryImpl implements StudentRepository {
         }
 
         return query.getResultList();
+    }
+
+    @Override
+    public boolean addStudent(Student c) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            if (c.getId() == null) {
+                s.save(c);
+            }
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateStudent(Student c) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            if (c.getId() != null) {
+                s.update(c);
+            }
+
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Student getStudentById(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(Student.class, id);
+    }
+
+    @Override
+    public boolean deleteStudent(String id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            Student t = this.getStudentById(id);
+            s.delete(t);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
 }

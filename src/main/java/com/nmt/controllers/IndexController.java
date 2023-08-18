@@ -18,20 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @ControllerAdvice
 @PropertySource("classpath:configs.properties")
-public class IndexController {
-    @Autowired
-    private LecturerService lecturerService;
-    @Autowired
-    private Environment env;
+public class IndexController { 
     
     @RequestMapping("/")
-    public String index(Model model, @RequestParam Map<String, String> params) {
-        model.addAttribute("lecturers", this.lecturerService.getLecturers(params));
-        
-        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-        int count = this.lecturerService.countLecturers();
-        model.addAttribute("counter", Math.ceil(count*1.0/pageSize));
-        
+    public String index() {
+      
         return "index";
     }
     

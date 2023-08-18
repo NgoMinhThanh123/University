@@ -17,4 +17,5 @@ public interface MajorRepository {
     boolean addMajor(Major m);
     boolean updateMajor(Major m);
     Major getMajorById(String id);
+    boolean deleteMajor(String id);
 }

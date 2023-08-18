@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -18,10 +19,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -41,27 +44,31 @@ public class Semester implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
+    @NotNull(message = "{semester.id.notNullMsg}")
+    @Size(min = 1, max = 5, message = "{semester.id.lenErrMsg}")
     @Column(name = "id")
     private String id;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{semester.schoolYear.notNullMsg}")
     @Column(name = "school_year")
     private int schoolYear;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{semester.fromDate.notNullMsg}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "from_date")
     @Temporal(TemporalType.DATE)
     private Date fromDate;
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{semester.toDate.notNullMsg}")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "to_date")
     @Temporal(TemporalType.DATE)
     private Date toDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semesterId")
+    @JsonIgnore
     private Set<SubjectSemester> subjectSemesterSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semesterId")
+    @JsonIgnore
     private Set<Score> scoreSet;
 
     public Semester() {

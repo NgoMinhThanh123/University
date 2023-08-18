@@ -25,5 +25,24 @@ public class ClassesServiceImpl implements ClassesService{
     public List<Classes> getClasses(Map<String, String> params) {
         return this.classesRepo.getClasses(params);
     }
+
+    @Override
+    public boolean addClass(Classes c) {
+        return this.classesRepo.addClass(c);
+    }
+
+    @Override
+    public boolean updateClass(Classes c) {
+        return this.classesRepo.updateClass(c);
+    }
     
+    @Override
+    public Classes getClassById(String id) {
+        return this.classesRepo.getClassById(id);
+    }
+
+    @Override
+    public boolean deleteClass(String id) {
+        return this.classesRepo.deleteClass(id);
+    }
 }

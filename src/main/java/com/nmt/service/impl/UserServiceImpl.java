@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -81,6 +82,37 @@ public class UserServiceImpl implements UserService {
 
         return new org.springframework.security.core.userdetails.User(
                 u.getUsername(), u.getPassword(), authorities);
+    }
+
+    @Override
+    public boolean authUser(String username, String password) {
+        return this.userRepo.authUser(username, password);
+    }
+
+    @Override
+    public User getUserByUn(String username) {
+        return this.userRepo.getUserByUsername(username);
+    }
+
+    @Override
+    public User addUser(Map<String, String> params, MultipartFile avatar) {
+        User u = new User();
+        u.setEmail(params.get("email"));
+        u.setUsername(params.get("username"));
+        u.setPassword(this.encoder.encode(params.get("password")));
+        u.setRole("ROLE_SINHVIEN");
+        if (!avatar.isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(avatar.getBytes(), 
+                        ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        this.userRepo.addUser(u);
+        return u;
     }
 
 }

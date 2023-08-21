@@ -24,7 +24,7 @@
                 <th>ID</th>
                 <th></th>
                 <th>Email</th>
-                <th>Role</th>
+                <th>Chức vụ</th>
                 <th></th>
             </tr>
         </thead>
@@ -36,7 +36,19 @@
                         <img src="${l.avatar}" width="100" />
                     </td>
                     <td>${l.email}</td>
-                    <td>${l.role}</td>                 
+                    <td>
+                        <c:choose>
+                            <c:when test="${l.role eq 'ROLE_GIAOVU'}">
+                                Giáo vụ
+                            </c:when>
+                            <c:when test="${l.role eq 'ROLE_GIANGVIEN'}">
+                                Giảng viên
+                            </c:when>
+                            <c:otherwise>
+                                Sinh viên
+                            </c:otherwise>
+                        </c:choose>
+                    </td>                 
                     <td>
                         <c:url value="/add_user/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>

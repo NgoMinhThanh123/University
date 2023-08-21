@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author acer
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class ApiSubjectController {
     @Autowired
@@ -38,7 +39,6 @@ public class ApiSubjectController {
     }
     
     @GetMapping("/subjects/")
-    @CrossOrigin
     public ResponseEntity<List<Subject>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.subjectService.getSubjects(params), HttpStatus.OK);
     }

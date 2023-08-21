@@ -39,7 +39,11 @@
             <tr>
                 <th>Id</th>
                 <th>Tên giảng viên</th>
+                <th>Giới tính</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
                 <th>Khoa</th>
+                 <th>Mã tài khoản</th>
                 <th></th>
             </tr>
         </thead>
@@ -48,7 +52,11 @@
                 <tr>   
                     <td>${l.id}</td>
                     <td>${l.name}</td>
+                    <td>${l.gender}</td>
+                    <td>${l.phone}</td>
+                    <td>${l.email}</td>
                     <td>${l.facultyId.name}</td>
+                    <td>${l.userId.id}</td>
                     <td>
                         <c:url value="/update_lecturer/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>

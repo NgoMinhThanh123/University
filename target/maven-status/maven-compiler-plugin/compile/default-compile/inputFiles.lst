@@ -8,7 +8,9 @@ E:\University\src\main\java\com\nmt\configs\WebAppContextConfig.java
 E:\University\src\main\java\com\nmt\repository\MajorRepository.java
 E:\University\src\main\java\com\nmt\model\ScoreValue.java
 E:\University\src\main\java\com\nmt\service\impl\SubjectServiceImpl.java
+E:\University\src\main\java\com\nmt\fillers\CustomAccessDeniedHandler.java
 E:\University\src\main\java\com\nmt\repository\impl\SubjectRepositoryImpl.java
+E:\University\src\main\java\com\nmt\fillers\RestAuthenticationEntryPoint.java
 E:\University\src\main\java\com\nmt\service\impl\UserServiceImpl.java
 E:\University\src\main\java\com\nmt\service\UserService.java
 E:\University\src\main\java\com\nmt\configs\HibernateConfig.java
@@ -22,6 +24,7 @@ E:\University\src\main\java\com\nmt\controllers\ApiClassController.java
 E:\University\src\main\java\com\nmt\formatters\UserFormatter.java
 E:\University\src\main\java\com\nmt\configs\TilesConfig.java
 E:\University\src\main\java\com\nmt\controllers\ApiSemesterController.java
+E:\University\src\main\java\com\nmt\components\JwtService.java
 E:\University\src\main\java\com\nmt\controllers\ApiUserController.java
 E:\University\src\main\java\com\nmt\controllers\UserController.java
 E:\University\src\main\java\com\nmt\controllers\StudentController.java
@@ -65,6 +68,8 @@ E:\University\src\main\java\com\nmt\model\Classes.java
 E:\University\src\main\java\com\nmt\service\impl\SemesterServiceImpl.java
 E:\University\src\main\java\com\nmt\repository\impl\FacultyRepositoryImpl.java
 E:\University\src\main\java\com\nmt\service\ClassesService.java
+E:\University\src\main\java\com\nmt\configs\JwtSecurityConfig.java
+E:\University\src\main\java\com\nmt\fillers\JwtAuthenticationTokenFilter.java
 E:\University\src\main\java\com\nmt\controllers\MajorController.java
 E:\University\src\main\java\com\nmt\controllers\ApiStudentController.java
 E:\University\src\main\java\com\nmt\repository\UserRepository.java

@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -41,9 +42,14 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar")})
 public class User implements Serializable {
-
+    
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Lecturer> lecturerSet;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
+    private Set<Student> studentSet;
+    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -190,6 +196,20 @@ public class User implements Serializable {
 
     public void setLecturerSet(Set<Lecturer> lecturerSet) {
         this.lecturerSet = lecturerSet;
+    }
+
+    /**
+     * @return the studentSet
+     */
+    public Set<Student> getStudentSet() {
+        return studentSet;
+    }
+
+    /**
+     * @param studentSet the studentSet to set
+     */
+    public void setStudentSet(Set<Student> studentSet) {
+        this.studentSet = studentSet;
     }
     
 }

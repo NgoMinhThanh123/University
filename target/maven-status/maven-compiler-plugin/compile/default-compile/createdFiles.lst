@@ -37,6 +37,7 @@ com\nmt\repository\StudentRepository.class
 com\nmt\controllers\ApiFacultyController.class
 com\nmt\repository\ScoreRepository.class
 com\nmt\controllers\FacultyController.class
+com\nmt\fillers\CustomAccessDeniedHandler.class
 com\nmt\model\Semester.class
 com\nmt\repository\impl\FacultyRepositoryImpl.class
 com\nmt\controllers\SubjectController.class
@@ -56,9 +57,11 @@ com\nmt\repository\impl\SubjectRepositoryImpl.class
 com\nmt\model\Faculty.class
 com\nmt\model\ClassesSubject.class
 com\nmt\service\impl\ScoreServiceImpl.class
+com\nmt\components\JwtService.class
 com\nmt\formatters\ClassFormatter.class
 com\nmt\repository\SemesterRepository.class
 com\nmt\controllers\StudentController.class
+com\nmt\fillers\JwtAuthenticationTokenFilter.class
 com\nmt\service\SemesterService.class
 com\nmt\service\StudentService.class
 com\nmt\formatters\FacultyFormatter.class
@@ -75,7 +78,9 @@ com\nmt\repository\ClassesRepository.class
 com\nmt\repository\SubjectRepository.class
 com\nmt\service\ScoreValueService.class
 com\nmt\repository\impl\SemesterRepositoryImpl.class
+com\nmt\fillers\RestAuthenticationEntryPoint.class
 com\nmt\controllers\ClassController.class
+com\nmt\configs\JwtSecurityConfig.class
 com\nmt\controllers\ApiLecturerController.class
 com\nmt\model\Major.class
 com\nmt\configs\SpringSecurityConfig.class

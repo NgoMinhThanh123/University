@@ -1,20 +1,15 @@
 
 import { useEffect, useState } from "react";
 import { Alert, Container } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
-import Apis, { endpoints } from "../configs/Apis";
-import MySpinner from "../layout/MySpinner";
+import Apis, { endpoints } from "../../configs/Apis";
+import MySpinner from "../../layout/MySpinner";
 
 const Home = () => {
     const [subjects, setSubjects] = useState(null);
-    const [q] = useSearchParams();
     useEffect(() => {
         const loadSubject = async () => {
            try {
             let e = endpoints['subjects'];
-            let kw = q.get("kw");
-            if (kw !== null)
-                e = `${e}?kw=${kw}`;
 
             let res = await Apis.get(e);
             setSubjects(res.data);
@@ -24,7 +19,7 @@ const Home = () => {
         }
 
         loadSubject();
-    }, [q]); 
+    }); 
 
     if (subjects === null) 
         return <MySpinner />

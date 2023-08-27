@@ -14,8 +14,11 @@ import java.util.Map;
  */
 public interface SubjectRepository {
     List<Subject> getSubjects(Map<String, String> params);
+    int countSubjects();
     boolean addSubject(Subject c);
     boolean updateSubject(Subject c);
     Subject getSubjectById(String id);
+    List<Subject> getSubjectByLecturerId(String lecturerId);
+    List<Subject> getSubjectByStudentId(String studentId);
     boolean deleteSubject(String id);
 }

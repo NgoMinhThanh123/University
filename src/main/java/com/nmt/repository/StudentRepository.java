@@ -14,8 +14,11 @@ import java.util.Map;
  */
 public interface StudentRepository {
     List<Student> getStudents(Map<String, String> params);
+    int countStudents();
     boolean addStudent(Student c);
     boolean updateStudent(Student c);
     Student getStudentById(String id);
+    Student getStudentByUsername(String username);
     boolean deleteStudent(String id);
+    List<Student> getListStudentBySubjectAndLecturer(String lecturerId, String subjectId);
 }

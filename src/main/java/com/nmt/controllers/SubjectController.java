@@ -10,6 +10,7 @@ import com.nmt.service.SubjectService;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,10 +30,15 @@ public class SubjectController {
     private SubjectService subjectService;   
     @Autowired
     private FacultyService facultyService;
+    @Autowired
+    private Environment env;
     
     @GetMapping("/subject")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("subject", this.subjectService.getSubjects(params));
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int count = this.subjectService.countSubjects();
+        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
 
         return "subject";
     }

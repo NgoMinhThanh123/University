@@ -47,4 +47,9 @@ public class MajorServiceImpl implements MajorService {
     public boolean deleteMajor(String id) {
         return this.majorRepo.deleteMajor(id);
     }
+
+    @Override
+    public int countMajors() {
+        return this.majorRepo.countMajors();
+    }
 }

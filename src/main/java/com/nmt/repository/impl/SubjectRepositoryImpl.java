@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class SubjectRepositoryImpl implements SubjectRepository{
+public class SubjectRepositoryImpl implements SubjectRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
+    @Autowired
+    private Environment env;
 
     @Override
     public List<Subject> getSubjects(Map<String, String> params) {
@@ -48,6 +52,14 @@ public class SubjectRepositoryImpl implements SubjectRepository{
         q.orderBy(b.asc(root.get("id")));
 
         Query query = s.createQuery(q);
+        if (params != null) {
+            String page = params.get("page");
+            if (page != null) {
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                query.setFirstResult((Integer.parseInt(page) - 1) * pageSize);
+                query.setMaxResults(pageSize);
+            }
+        }
 
         return query.getResultList();
     }
@@ -91,5 +103,53 @@ public class SubjectRepositoryImpl implements SubjectRepository{
             return false;
         }
     }
-    
+
+    @Override
+    public int countSubjects() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT COUNT(*) FROM Subject");
+
+        return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public List<Subject> getSubjectByLecturerId(String lecturerId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        List<Subject> subjects = new ArrayList<>();
+        try {
+            String sql = "SELECT subject.id, subject.name, subject.credit, subject.faculty_id\n"
+                    + "FROM subject join lecturer_subject on subject.id = lecturer_subject.subject_id\n"
+                    + "join lecturer on lecturer.id = lecturer_subject.lecturer_id\n"
+                    + "where lecturer.id = :lecturerId";
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("lecturerId", lecturerId);
+
+            subjects = query.getResultList();
+            System.out.println(subjects);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return subjects;
+    }
+
+    @Override
+    public List<Subject> getSubjectByStudentId(String studentId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        List<Subject> subjects = new ArrayList<>();
+        try {
+            String sql = "SELECT subject.name\n"
+                    + "FROM subject join student_subject on subject.id = student_subject.subject_id\n"
+                    + "join student on student.id = student_subject.student_id\n"
+                    + "where student.id = :studentId";
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("studentId", studentId);
+
+            subjects = query.getResultList();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return subjects;
+    }
+
 }

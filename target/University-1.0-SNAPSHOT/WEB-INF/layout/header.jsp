@@ -44,6 +44,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value="/semester" />">Học kỳ</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value="/score" />">Điểm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value="/score_value" />">Chi tiết điểm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value="/score_column" />">Cột điểm</a>
+                </li>
                 </se:authorize>
                 <c:choose>
                     <c:when test="${pageContext.request.userPrincipal.name != null}">

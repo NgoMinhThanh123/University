@@ -65,10 +65,8 @@ public class Semester implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date toDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semesterId")
-    @JsonIgnore
     private Set<SubjectSemester> subjectSemesterSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "semesterId")
-    @JsonIgnore
     private Set<Score> scoreSet;
 
     public Semester() {

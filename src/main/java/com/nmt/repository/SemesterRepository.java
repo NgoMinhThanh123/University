@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public interface SemesterRepository {
     List<Semester> getSemesters(Map<String, String> params);
+    int countSemesters();
     boolean addSemester(Semester m);
     boolean updateSemester(Semester m);
     Semester getSemesterById(String id);

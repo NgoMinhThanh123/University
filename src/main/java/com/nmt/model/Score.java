@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,15 +44,13 @@ public class Score implements Serializable {
     private Integer id;
     @JoinColumn(name = "semester_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Semester semesterId;
     @JoinColumn(name = "student_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JsonIgnore
     private Student studentId;
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Subject subjectId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "scoreId")
     @JsonIgnore

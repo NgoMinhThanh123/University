@@ -4,13 +4,15 @@
  */
 package com.nmt.controllers;
 
-import com.nmt.model.Semester;
 import com.nmt.model.Student;
 import com.nmt.service.StudentService;
+import com.nmt.service.UserService;
+import dto.StudentDto;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +33,8 @@ public class ApiStudentController {
 
     @Autowired
     private StudentService studentService;
+     @Autowired
+    private UserService userService;
 
     @DeleteMapping("/update_student/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -38,9 +42,41 @@ public class ApiStudentController {
         this.studentService.deleteStudent(id);
     }
 
-    @GetMapping("/students/")
+    @GetMapping("/students")
     @CrossOrigin
     public ResponseEntity<List<Student>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.studentService.getStudents(params), HttpStatus.OK);
     }
+    
+    @GetMapping("/students/{id}/")
+    @CrossOrigin
+    public ResponseEntity<Student> getStudentById(@PathVariable(value = "id") String id) {
+        Student student = studentService.getStudentById(id);
+        if (student == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(student, HttpStatus.OK);
+    }
+    
+    @GetMapping(path = "/students-un/{username}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<StudentDto> getStudentByUsename(@PathVariable(value = "username") String username) {    
+        StudentDto studentDto = studentService.getStudentByUsername(username);
+        if (studentDto == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(studentDto, HttpStatus.OK);
+    }
+    
+    @GetMapping(path = "/get-list-student/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Student>> getStudentsBySubjectAndLecturer(
+            @RequestParam String subjectId,
+            @RequestParam String lecturerId) {
+        List<Student> list = studentService.getListStudentBySubjectAndLecturer(lecturerId, subjectId);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
 }

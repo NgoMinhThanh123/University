@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public interface MajorRepository {
     List<Major> getMajors(Map<String, String> params);
+    int countMajors();
     boolean addMajor(Major m);
     boolean updateMajor(Major m);
     Major getMajorById(String id);

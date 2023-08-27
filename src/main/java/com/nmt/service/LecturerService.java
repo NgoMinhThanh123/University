@@ -5,6 +5,7 @@
 package com.nmt.service;
 
 import com.nmt.model.Lecturer;
+import dto.LecturerDto;
 import java.util.List;
 import java.util.Map;
 
@@ -18,5 +19,6 @@ public interface LecturerService {
     boolean updateLeturer(Lecturer l);
     Lecturer getLecturerById(String id);
     int countLecturers();
-     boolean deleteLecturer(String id);
+    boolean deleteLecturer(String id);
+    LecturerDto getLecturerByUsername(String username);
 }

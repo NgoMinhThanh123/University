@@ -46,6 +46,9 @@ public class StudentController {
     @GetMapping("/student")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("student", this.studentService.getStudents(params));
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int count = this.studentService.countStudents();
+        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
 
         return "student";
     }

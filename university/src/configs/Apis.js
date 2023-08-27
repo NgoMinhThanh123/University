@@ -5,10 +5,16 @@ const SERVER_CONTEXT = "/University";
 const SERVER = "http://localhost:8080";
 
 export const endpoints = {
-    "subjects": `${SERVER_CONTEXT}/api/subjects/`,
-    "faculties": `${SERVER_CONTEXT}/api/faculties/`,
+    // "subjects": `${SERVER_CONTEXT}/api/subjects/`,
+    // "faculties": `${SERVER_CONTEXT}/api/faculties/`,
     "login": `${SERVER_CONTEXT}/api/login/`,
+    "register": `${SERVER_CONTEXT}/api/users/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
+    "get-user": `${SERVER_CONTEXT}/api/users/{username}/`,
+    "get-student-by-username": `${SERVER_CONTEXT}/api/students-un/{username}/`,
+    "get-lecturer-by-username": `${SERVER_CONTEXT}/api/lecturers-un/{username}/`,
+    "get-student-by-lecturer-subject-id": `${SERVER_CONTEXT}/api/get-list-student/`,
+    "get-subject-by-lecturerId": `${SERVER_CONTEXT}/api/subjects/{lecturerId}/`,
 }
 
 export const authApi = () => {

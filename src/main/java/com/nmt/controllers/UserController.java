@@ -9,6 +9,7 @@ import com.nmt.service.UserService;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private Environment env;
 
     @GetMapping("/login")
     public String login() {
@@ -34,6 +37,9 @@ public class UserController {
     @GetMapping("/user")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("user", this.userService.getUsers(params));
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int count = this.userService.countUsers();
+        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
         return "user";
     }
 
@@ -54,11 +60,11 @@ public class UserController {
     @PostMapping("/add_user")
     public String add(@ModelAttribute(value = "add_user") @Valid User u,
             BindingResult rs) {
-        if(!rs.hasErrors()){
+//        if(!rs.hasErrors()){
             if (this.userService.addOrUpdateUser(u) == true) {
                 return "redirect:/user";
             }
-        }
+//        }
         return "add_user";
     }
 }

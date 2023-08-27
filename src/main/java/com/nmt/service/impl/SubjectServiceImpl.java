@@ -47,4 +47,19 @@ public class SubjectServiceImpl implements SubjectService {
         return this.subjectRepo.deleteSubject(id);
     }
 
+    @Override
+    public int countSubjects() {
+        return this.subjectRepo.countSubjects();
+    }
+
+    @Override
+    public List<Subject> getSubjectByLecturerId(String lecturerId) {
+        return this.subjectRepo.getSubjectByLecturerId(lecturerId);
+    }
+
+    @Override
+    public List<Subject> getSubjectByStudentId(String studentId) {
+        return this.subjectRepo.getSubjectByStudentId(studentId);
+    }
+
 }

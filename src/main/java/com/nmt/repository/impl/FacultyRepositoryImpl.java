@@ -56,6 +56,14 @@ public class FacultyRepositoryImpl implements FacultyRepository {
         q.orderBy(b.desc(root.get("id")));
 
         Query query = s.createQuery(q);
+        if (params != null) {
+            String page = params.get("page");
+            if (page != null) {
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                query.setFirstResult((Integer.parseInt(page) - 1) * pageSize);
+                query.setMaxResults(pageSize);
+            }
+        }
 
         return query.getResultList();
     }
@@ -99,6 +107,14 @@ public class FacultyRepositoryImpl implements FacultyRepository {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public int countFaculties() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT COUNT(*) FROM Faculty");
+
+        return Integer.parseInt(q.getSingleResult().toString());
     }
 
 

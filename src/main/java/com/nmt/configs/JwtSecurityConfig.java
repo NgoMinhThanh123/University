@@ -90,11 +90,14 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/subjects/").permitAll();
         http.authorizeRequests().antMatchers("/api/faculty/").permitAll();
         http.authorizeRequests().antMatchers("/api/users/").permitAll();
+        http.authorizeRequests().antMatchers("/api/users/{username}/").permitAll();
+        http.authorizeRequests().antMatchers("/api/get-list-student/").permitAll();
+        
         http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_GIAOVU') or hasRole('ROLE_GIANGVIEN') or hasRole('ROLE_SINHVIEN')")
-                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_GIAOVU') or hasRole('ROLE_GIANGVIEN') or hasRole('ROLE_SINHVIEN')")
-                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ROLE_GIAOVU') or hasRole('ROLE_GIANGVIEN') or hasRole('ROLE_SINHVIEN')").and()
+                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_GIAOVU') or hasRole('ROLE_GIANGVIEN') or hasRole('ROLE_SINHVIEN')").and()
+//                .antMatchers(HttpMethod.DELETE, "/api/").access("hasRole('ROLE_GIAOVU')").and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
     }

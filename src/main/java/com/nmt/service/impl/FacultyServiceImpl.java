@@ -45,4 +45,9 @@ public class FacultyServiceImpl implements FacultyService{
     public boolean deleteFaculty(String id) {
         return this.facultyRepo.deleteFaculty(id);
     }
+
+    @Override
+    public int countFaculties() {
+        return this.facultyRepo.countFaculties();
+    }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.nmt.repository.LecturerRepository;
 import java.util.ArrayList;
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.Predicate;
 import org.hibernate.HibernateException;
 import org.springframework.core.env.Environment;
@@ -113,6 +114,20 @@ public class LecturerRepositoryImpl implements LecturerRepository {
         } catch (HibernateException ex) {
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public Lecturer getLecturerByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            String hql = "FROM Lecturer s WHERE s.userId.username = :username";
+            Lecturer lecturer = s.createQuery(hql, Lecturer.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+            return lecturer;
+        } catch (NoResultException e) {
+            return null;
         }
     }
 

@@ -9,6 +9,7 @@ import com.nmt.service.SemesterService;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,10 +28,15 @@ public class SemesterController {
 
     @Autowired
     private SemesterService semesterService;
+    @Autowired
+    private Environment env;
 
     @GetMapping("/semester")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("semester", this.semesterService.getSemesters(params));
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int count = this.semesterService.countSemesters();
+        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
         return "semester";
     }
 

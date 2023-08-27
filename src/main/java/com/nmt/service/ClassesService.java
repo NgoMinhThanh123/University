@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public interface ClassesService {
     List<Classes> getClasses(Map<String, String> params);
+    int countClasses();
     boolean addClass(Classes c);
     boolean updateClass(Classes c);
     Classes getClassById(String id);

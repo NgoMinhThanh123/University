@@ -5,6 +5,7 @@ import com.nmt.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -55,6 +56,14 @@ public class UserRepositoryImpl implements UserRepository{
         q.orderBy(b.asc(root.get("id")));
 
         Query query = s.createQuery(q);
+        if (params != null) {
+            String page = params.get("page");
+            if (page != null) {
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                query.setFirstResult((Integer.parseInt(page) - 1) * pageSize);
+                query.setMaxResults(pageSize);
+            }
+        }
 
         return query.getResultList();
     }
@@ -98,10 +107,27 @@ public class UserRepositoryImpl implements UserRepository{
     @Override
     public User getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query q = s.createQuery("From User Where username=:un");
+        Query q = s.createQuery("FROM User WHERE username=:un");
         q.setParameter("un", username);
-        
-        return (User) q.getSingleResult();
+
+        try {
+            return (User) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // Trả về null nếu không tìm thấy dữ liệu
+        }
+    }
+
+    @Override
+    public User getUByUn(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM User WHERE username=:un");
+        q.setParameter("un", username);
+
+        try {
+            return (User) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // Trả về null nếu không tìm thấy dữ liệu
+        }
     }
 
     @Override
@@ -117,6 +143,33 @@ public class UserRepositoryImpl implements UserRepository{
         s.save(user);
         
         return user;
+    }
+
+    @Override
+    public boolean isValidSchoolEmail(String email) {
+        String schoolDomain = "ou.edu.vn";
+        return email.endsWith("@" + schoolDomain);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("From User Where email=:em");
+        q.setParameter("em", email);
+
+        try {
+            return (User) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // Trả về null nếu không tìm thấy dữ liệu
+        }
+    }
+
+    @Override
+    public int countUsers() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT COUNT(*) FROM User");
+
+        return Integer.parseInt(q.getSingleResult().toString());
     }
     
 }

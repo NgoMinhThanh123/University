@@ -12,16 +12,17 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -86,18 +87,17 @@ public class Student implements Serializable {
     @JsonIgnore
     private Faculty facultyId;
     @JoinColumn(name = "major_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JsonIgnore
     private Major majorId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @OneToOne(optional = false)
     @JsonIgnore
     private User userId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Score> scoreSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId", fetch = FetchType.LAZY)
     private Set<StudentSubject> studentSubjectSet;
 
     public Student() {

@@ -6,9 +6,13 @@ package com.nmt.service.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.nmt.controllers.ApiUserController;
 import com.nmt.model.User;
+import com.nmt.repository.StudentRepository;
 import com.nmt.repository.UserRepository;
 import com.nmt.service.UserService;
+import dto.UserDto;
+import exception.UserException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +39,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private StudentRepository studentRepository;
     @Autowired
     private Cloudinary cloudinary;
     @Autowired
@@ -90,12 +97,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getUByUn(String username) {
+        User u = this.userRepo.getUserByUsername(username);
+        UserDto userDto = new UserDto();
+        userDto.setUsername(u.getUsername());
+        userDto.setPassword(u.getPassword());
+        userDto.setEmail(u.getEmail());
+        userDto.setRole(u.getRole());
+
+        return userDto;
+
+    }
+
+    @Override
     public User getUserByUn(String username) {
         return this.userRepo.getUserByUsername(username);
     }
 
     @Override
     public User addUser(Map<String, String> params, MultipartFile avatar) {
+        if(this.getUserByUn(params.get("username")) != null){
+            throw new UserException(HttpStatus.BAD_REQUEST, "Tên tài khoản đã tồn tại");
+        }
+        if(this.getUserByEmail(params.get("email")) != null){
+            throw new UserException(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
+        }
+        if(!this.isValidSchoolEmail(params.get("email"))){
+            throw new UserException(HttpStatus.BAD_REQUEST, "Email không đúng định dạng");
+        }
         User u = new User();
         u.setEmail(params.get("email"));
         u.setUsername(params.get("username"));
@@ -103,16 +132,31 @@ public class UserServiceImpl implements UserService {
         u.setRole("ROLE_SINHVIEN");
         if (!avatar.isEmpty()) {
             try {
-                Map res = this.cloudinary.uploader().upload(avatar.getBytes(), 
+                Map res = this.cloudinary.uploader().upload(avatar.getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatar(res.get("secure_url").toString());
             } catch (IOException ex) {
                 Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         this.userRepo.addUser(u);
         return u;
+    }
+
+    @Override
+    public boolean isValidSchoolEmail(String email) {
+        return this.userRepo.isValidSchoolEmail(email);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return this.userRepo.getUserByEmail(email);
+    }
+
+    @Override
+    public int countUsers() {
+        return this.userRepo.countUsers();
     }
 
 }

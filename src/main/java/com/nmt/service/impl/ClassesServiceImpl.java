@@ -45,4 +45,9 @@ public class ClassesServiceImpl implements ClassesService{
     public boolean deleteClass(String id) {
         return this.classesRepo.deleteClass(id);
     }
+
+    @Override
+    public int countClasses() {
+        return this.classesRepo.countClasses();
+    }
 }

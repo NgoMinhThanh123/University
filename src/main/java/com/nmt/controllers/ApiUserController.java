@@ -7,6 +7,9 @@ package com.nmt.controllers;
 import com.nmt.components.JwtService;
 import com.nmt.model.User;
 import com.nmt.service.UserService;
+import dto.UserDto;
+import exception.UserException;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +54,12 @@ public class ApiUserController {
         return new ResponseEntity<>(this.userService.getUsers(params), HttpStatus.OK);
     }
     
+    @GetMapping("/users/{username}/")
+    @CrossOrigin
+    public ResponseEntity<UserDto> getUByUn(@PathVariable(value = "username") String username, Principal user) {
+        return new ResponseEntity<>(this.userService.getUByUn(username), HttpStatus.OK);
+    }
+    
     @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<String> login(@RequestBody User user) {
@@ -73,10 +82,15 @@ public class ApiUserController {
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, 
             produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<User> addUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
-        User user = this.userService.addUser(params, avatar);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
-    }
+    public ResponseEntity<Object> addUser(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
+         try {
+            User user = this.userService.addUser(params, avatar);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (UserException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+   }
+  
     
     @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin

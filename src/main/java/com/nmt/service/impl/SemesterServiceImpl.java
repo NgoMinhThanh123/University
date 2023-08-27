@@ -45,4 +45,9 @@ public class SemesterServiceImpl implements SemesterService {
     public boolean deleteSemester(String id) {
         return this.semesRepo.deleteSemester(id);
     }
+
+    @Override
+    public int countSemesters() {
+        return this.semesRepo.countSemesters();
+    }
 }

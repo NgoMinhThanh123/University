@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,5 +42,23 @@ public class ApiSubjectController {
     @GetMapping("/subjects/")
     public ResponseEntity<List<Subject>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.subjectService.getSubjects(params), HttpStatus.OK);
+    }
+    
+    @GetMapping(path = "/subjects/{lecturerId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Subject>> getSubjectByLecturerId(@PathVariable(value = "lecturerId") String lecturerId) {
+        List<Subject> list = subjectService.getSubjectByLecturerId(lecturerId);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
+    @GetMapping(path = "/subjects/studentId/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Subject>> getSubjectByStudentId(@RequestParam String studentId) {
+        List<Subject> list = subjectService.getSubjectByStudentId(studentId);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

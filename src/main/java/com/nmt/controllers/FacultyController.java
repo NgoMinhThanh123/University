@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,10 +29,15 @@ public class FacultyController {
 
     @Autowired
     private FacultyService facultyService;
+    @Autowired
+    private Environment env;
 
     @GetMapping("/faculty")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("faculty", this.facultyService.getFaculties(params));
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int count = this.facultyService.countFaculties();
+        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
 
         return "faculty";
     }

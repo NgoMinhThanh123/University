@@ -36,3 +36,20 @@
     font-weight: 600;
     color: rgb(34, 34, 34);
   }
+
+  .login{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .error-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    margin-top: 10px; /* Điều chỉnh khoảng cách trên dòng chữ lỗi */
+  }
+
+  .center{
+    text-align: center;
+}

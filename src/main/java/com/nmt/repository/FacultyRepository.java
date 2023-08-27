@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public interface FacultyRepository {
     List<Faculty> getFaculties(Map<String, String> params);
+    int countFaculties();
     boolean addFaculty(Faculty f);
     boolean updateFaculty(Faculty f);
     Faculty getFacultyById(String id);

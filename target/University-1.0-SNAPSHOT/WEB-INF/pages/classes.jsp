@@ -16,7 +16,17 @@
             </form>
         </div>
     </div>
-
+    <c:if test="${counter > 1}">
+        <ul class="pagination mt-1">
+            <li class="page-item"><a class="page-link" href="<c:url value="/classes" />">Tất cả</a></li>
+                <c:forEach begin="1" end="${counter}" var="i">
+                    <c:url value="/classes" var="pageUrl">
+                        <c:param name="page" value="${i}"></c:param>
+                    </c:url>
+                <li class="page-item"><a class="page-link" href="${pageUrl}">${i}</a></li>
+                </c:forEach>
+        </ul>
+    </c:if>
 
     <table class="table table-hover">
         <thead>

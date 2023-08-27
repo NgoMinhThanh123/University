@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SemesterRepositoryImpl implements SemesterRepository{
     @Autowired
     private LocalSessionFactoryBean factory;
-
+    @Autowired
+    private Environment env;
 
     @Override
     public List<Semester> getSemesters(Map<String, String> params) {
@@ -49,6 +51,14 @@ public class SemesterRepositoryImpl implements SemesterRepository{
         q.orderBy(b.desc(root.get("id")));
 
         Query query = s.createQuery(q);
+        if (params != null) {
+            String page = params.get("page");
+            if (page != null) {
+                int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+                query.setFirstResult((Integer.parseInt(page) - 1) * pageSize);
+                query.setMaxResults(pageSize);
+            }
+        }
 
         return query.getResultList();
     }
@@ -92,6 +102,14 @@ public class SemesterRepositoryImpl implements SemesterRepository{
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public int countSemesters() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT COUNT(*) FROM Semester");
+
+        return Integer.parseInt(q.getSingleResult().toString());
     }
     
 }

@@ -4,10 +4,12 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,7 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -30,7 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ScoreValue.findAll", query = "SELECT s FROM ScoreValue s"),
     @NamedQuery(name = "ScoreValue.findById", query = "SELECT s FROM ScoreValue s WHERE s.id = :id"),
-    @NamedQuery(name = "ScoreValue.findByName", query = "SELECT s FROM ScoreValue s WHERE s.name = :name"),
     @NamedQuery(name = "ScoreValue.findByValue", query = "SELECT s FROM ScoreValue s WHERE s.value = :value")})
 public class ScoreValue implements Serializable {
 
@@ -42,16 +42,14 @@ public class ScoreValue implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 15)
-    @Column(name = "name")
-    private String name;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "value")
     private double value;
     @JoinColumn(name = "score_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Score scoreId;
+    @JoinColumn(name = "score_column_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private ScoreColumn scoreColumnId;
 
     public ScoreValue() {
     }
@@ -60,9 +58,8 @@ public class ScoreValue implements Serializable {
         this.id = id;
     }
 
-    public ScoreValue(Integer id, String name, double value) {
+    public ScoreValue(Integer id, double value) {
         this.id = id;
-        this.name = name;
         this.value = value;
     }
 
@@ -72,14 +69,6 @@ public class ScoreValue implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getValue() {
@@ -96,6 +85,14 @@ public class ScoreValue implements Serializable {
 
     public void setScoreId(Score scoreId) {
         this.scoreId = scoreId;
+    }
+
+    public ScoreColumn getScoreColumnId() {
+        return scoreColumnId;
+    }
+
+    public void setScoreColumnId(ScoreColumn scoreColumnId) {
+        this.scoreColumnId = scoreColumnId;
     }
 
     @Override

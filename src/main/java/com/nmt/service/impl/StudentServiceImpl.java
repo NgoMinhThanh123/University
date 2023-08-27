@@ -7,6 +7,7 @@ package com.nmt.service.impl;
 import com.nmt.model.Student;
 import com.nmt.repository.StudentRepository;
 import com.nmt.service.StudentService;
+import dto.StudentDto;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,33 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public boolean deleteStudent(String id) {
         return this.studentRepo.deleteStudent(id);
+    }
+
+    @Override
+    public StudentDto getStudentByUsername(String username) {
+        Student u = this.studentRepo.getStudentByUsername(username);
+        StudentDto studentDto = new StudentDto();
+        studentDto.setId(u.getId());
+        studentDto.setName(u.getName());
+        studentDto.setBirthday(u.getBirthday());
+        studentDto.setGender(u.getGender());
+        studentDto.setPhone(u.getPhone());
+        studentDto.setAddress(u.getAddress());
+        studentDto.setClassesId(u.getClassesId());
+        studentDto.setFacultyId(u.getFacultyId());
+        studentDto.setMajorId(u.getMajorId());
+        
+        return studentDto;
+    }
+
+    @Override
+    public List<Student> getListStudentBySubjectAndLecturer(String lectureId, String subjectId) {
+        return this.studentRepo.getListStudentBySubjectAndLecturer(lectureId, subjectId);
+    }
+
+    @Override
+    public int countStudents() {
+        return this.studentRepo.countStudents();
     }
     
 }

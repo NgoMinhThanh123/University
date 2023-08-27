@@ -1,6 +1,7 @@
 package com.nmt.repository.impl;
 
 import com.nmt.model.Student;
+import com.nmt.model.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,9 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.nmt.repository.StudentRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import org.hibernate.HibernateException;
 
 /**
@@ -32,6 +36,8 @@ public class StudentRepositoryImpl implements StudentRepository {
     private LocalSessionFactoryBean factory;
     @Autowired
     private Environment env;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<Student> getStudents(Map<String, String> params) {
@@ -120,6 +126,53 @@ public class StudentRepositoryImpl implements StudentRepository {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Student getStudentByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        try {
+            String hql = "FROM Student s WHERE s.userId.username = :username";
+            Student student = s.createQuery(hql, Student.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+            return student;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<Student> getListStudentBySubjectAndLecturer(String lecturerId, String subjectId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        List<Student> students = new ArrayList<>();
+
+        try {
+            String sql = "SELECT student.id, student.name, student.birthday, student.gender, student.phone, student.address, student.user_id, student.classes_id, student.faculty_id, student.major_id \n"
+                    + "From student join student_subject on student.id = student_subject.student_id\n"
+                    + "join subject on subject.id = student_subject.subject_id\n"
+                    + "join lecturer_subject on subject.id = lecturer_subject.subject_id\n"
+                    + "join lecturer on lecturer.id = lecturer_subject.lecturer_id "
+                    + "WHERE subject.id = :subjectId AND lecturer.id = :lecturerId";
+
+        Query query = s.createNativeQuery(sql);
+        query.setParameter("subjectId", subjectId);
+        query.setParameter("lecturerId", lecturerId);
+
+        students = query.getResultList();
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+
+        return students;
+    }
+
+    @Override
+    public int countStudents() {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT COUNT(*) FROM Student");
+
+        return Integer.parseInt(q.getSingleResult().toString());
     }
 
 }

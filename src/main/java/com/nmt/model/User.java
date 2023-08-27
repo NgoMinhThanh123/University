@@ -5,6 +5,7 @@
 package com.nmt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -19,11 +20,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -33,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Entity
 @Table(name = "user")
 @XmlRootElement
+@JsonIgnoreProperties("file")
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -42,14 +42,6 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar")})
 public class User implements Serializable {
-    
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Lecturer> lecturerSet;
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "facultyId")
-    private Set<Student> studentSet;
-    
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,13 +51,12 @@ public class User implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull(message = "{user.username.notNullMsg}")
-    @Size(min = 5, max = 45, message = "{user.username.lenErrMsg}")
+    @Size(min = 1, max = 45, message = "{user.username.lenErrMsg}")
     @Column(name = "username")
     private String username;
     @Basic(optional = false)
     @NotNull(message = "{user.password.notNullMsg}")
-    @Size(min = 5, max = 100, message = "{user.password.lenErrMsg}")
-    @NotBlank
+    @Size(min = 6, max = 100, message = "{user.password.lenErrMsg}")
     @Column(name = "password")
     private String password;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -81,10 +72,18 @@ public class User implements Serializable {
     private String role;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "avatar")
     private String avatar;
     @Transient
-    private MultipartFile file;
+    @JsonIgnore
+    private MultipartFile file; 
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Lecturer> lecturerSet;
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Set<Student> studentSet;
 
     public User() {
     }
@@ -149,6 +148,33 @@ public class User implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+     /**
+     * @return the lecturerSet
+     */
+    public Set<Lecturer> getLecturerSet() {
+        return lecturerSet;
+    }
+
+    /**
+     * @param lecturerSet the lecturerSet to set
+     */
+    public void setLecturerSet(Set<Lecturer> lecturerSet) {
+        this.lecturerSet = lecturerSet;
+    }
+
+    /**
+     * @return the studentSet
+     */
+    public Set<Student> getStudentSet() {
+        return studentSet;
+    }
+
+    /**
+     * @param studentSet the studentSet to set
+     */
+    public void setStudentSet(Set<Student> studentSet) {
+        this.studentSet = studentSet;
+    }
 
     @Override
     public int hashCode() {
@@ -187,29 +213,6 @@ public class User implements Serializable {
      */
     public void setFile(MultipartFile file) {
         this.file = file;
-    }
-
-    @XmlTransient
-    public Set<Lecturer> getLecturerSet() {
-        return lecturerSet;
-    }
-
-    public void setLecturerSet(Set<Lecturer> lecturerSet) {
-        this.lecturerSet = lecturerSet;
-    }
-
-    /**
-     * @return the studentSet
-     */
-    public Set<Student> getStudentSet() {
-        return studentSet;
-    }
-
-    /**
-     * @param studentSet the studentSet to set
-     */
-    public void setStudentSet(Set<Student> studentSet) {
-        this.studentSet = studentSet;
     }
     
 }

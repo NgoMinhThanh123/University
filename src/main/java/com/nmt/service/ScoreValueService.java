@@ -6,11 +6,16 @@ package com.nmt.service;
 
 import com.nmt.model.ScoreValue;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author acer
  */
 public interface ScoreValueService {
-    List<ScoreValue> getScoreValues();
+    List<ScoreValue> getScoreValues(Map<String, String> params);
+    int countScoreValues();
+    boolean addOrUpdateScoreValue(ScoreValue u);
+    ScoreValue getScoreValueById(int id);
+    boolean deleteScoreValue(int id);
 }

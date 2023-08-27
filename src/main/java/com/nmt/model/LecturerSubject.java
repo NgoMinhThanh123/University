@@ -4,6 +4,7 @@
  */
 package com.nmt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,9 +39,11 @@ public class LecturerSubject implements Serializable {
     private Integer id;
     @JoinColumn(name = "lecturer_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Lecturer lecturerId;
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Subject subjectId;
 
     public LecturerSubject() {

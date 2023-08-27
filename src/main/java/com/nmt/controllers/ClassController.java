@@ -9,6 +9,7 @@ import com.nmt.service.ClassesService;
 import com.nmt.service.FacultyService;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,10 +29,15 @@ public class ClassController {
     private ClassesService classesService;
     @Autowired
     private FacultyService facultyService;
+    @Autowired
+    private Environment env;
     
     @GetMapping("/classes")
     public String list(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("classes", this.classesService.getClasses(params));
+        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
+        int count = this.classesService.countClasses();
+        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
         
         return "classes";
     }

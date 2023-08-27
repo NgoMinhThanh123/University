@@ -132,9 +132,39 @@
         <put-attribute name="content"
                        value="/WEB-INF/pages/update_semester.jsp" />
     </definition>
-     <definition name="login" extends="baseLayout">
+    <definition name="login" extends="baseLayout">
         <put-attribute name="title" value="Đăng nhập" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/login.jsp" />
+    </definition>
+    <definition name="score" extends="baseLayout">
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/score.jsp" />
+    </definition>
+    <definition name="add_score" extends="baseLayout">
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/add_score.jsp" />
+    </definition>
+    <definition name="score_value" extends="baseLayout">
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/score_value.jsp" />
+    </definition>
+    <definition name="add_score_value" extends="baseLayout">
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/add_score_value.jsp" />
+    </definition>
+    <definition name="add_score_column" extends="baseLayout">
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/add_score_column.jsp" />
+    </definition>
+    <definition name="score_column" extends="baseLayout">
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/score_column.jsp" />
     </definition>
 </tiles-definitions>

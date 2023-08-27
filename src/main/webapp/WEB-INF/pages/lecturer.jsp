@@ -16,23 +16,18 @@
             </form>
         </div>
     </div>
-
-    <c:if test="${pages > 1}">
+                
+    <c:if test="${counter > 1}">
         <ul class="pagination mt-1">
-            <li class="page-item"><a class="page-link" href="${action}">Tất cả</a></li>
-                <c:forEach begin="1" end="${pages}" var="i">
+            <li class="page-item"><a class="page-link" href="<c:url value="/lecturer" />">Tất cả</a></li>
+                <c:forEach begin="1" end="${counter}" var="i">
                     <c:url value="/lecturer" var="pageUrl">
-                        <c:param name="page" value="${i}" /> 
+                        <c:param name="page" value="${i}"></c:param>
                     </c:url>
                 <li class="page-item"><a class="page-link" href="${pageUrl}">${i}</a></li>
                 </c:forEach>
-            <li class="page-item">
-                <form action="${action}" id="pageNumber">
-                    <input type="number" min="1" max="${pages}" name="page" onchange="document.getElementById('pageNumber').submit()" />
-                </form>
-            </li>
         </ul>
-    </c:if>
+    </c:if>      
 
     <table class="table table-hover">
         <thead>

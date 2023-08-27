@@ -21,12 +21,16 @@ const Header = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Link className="nav-link" to="/">Trang chủ</Link>
-            <Link className="nav-link" to="/">Hồ sơ</Link>
-            <Link className="nav-link" to="/">Sinh viên</Link>
-            <Link className="nav-link" to="/">Điểm</Link>
-            <Link className="nav-link" to="/">Thông báo</Link>
-            <Link className="nav-link" to="/">Chat</Link>
-            {user === null ? <Link className="nav-link" to="/login">Chat</Link>:<>
+            <Link className="nav-link" to="/profile">Hồ sơ</Link>
+            {user.role === "ROLE_GIANGVIEN" && (
+                <Link className="nav-link" to="/student">
+                  Sinh viên
+                </Link>
+              )}
+            <Link className="nav-link" to="/score">Điểm</Link>
+            <Link className="nav-link" to="/forum">Diễn đàn</Link>
+            <Link className="nav-link" to="/chat">Chat</Link>
+            {user === null ? <Link className="nav-link" to="/login">Đăng nhập</Link>:<>
               <Link className="nav-link" to="/login">Chào {user.username}!</Link>
               <Link className="nav-link" variant="secondary" onClick={logout} to="/login">Đăng xuất</Link>
             </>}

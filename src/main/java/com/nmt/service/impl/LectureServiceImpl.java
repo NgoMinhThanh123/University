@@ -7,6 +7,7 @@ package com.nmt.service.impl;
 import com.nmt.model.Lecturer;
 import com.nmt.repository.LecturerRepository;
 import com.nmt.service.LecturerService;
+import dto.LecturerDto;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.List;
@@ -53,6 +54,21 @@ public class LectureServiceImpl implements LecturerService {
     public boolean deleteLecturer(String id) {
         return this.lecturersRepo.deleteLecturer(id);
 
+    }
+
+    @Override
+    public LecturerDto getLecturerByUsername(String username) {
+        Lecturer u = this.lecturersRepo.getLecturerByUsername(username);
+        LecturerDto lecturerDto = new LecturerDto();
+        lecturerDto.setId(u.getId());
+        lecturerDto.setName(u.getName());
+        lecturerDto.setBirthday(u.getBirthday());
+        lecturerDto.setGender(u.getGender());
+        lecturerDto.setPhone(u.getPhone());
+        lecturerDto.setAddress(u.getAddress());
+        lecturerDto.setFacultyId(u.getFacultyId());
+        
+        return lecturerDto;
     }
 
 }

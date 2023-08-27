@@ -13,5 +13,9 @@ import java.util.Map;
  * @author acer
  */
 public interface ScoreValueRepository {
-    List<ScoreValue> getScoreValues();
+    List<ScoreValue> getScoreValues(Map<String, String> params);
+    int countScoreValues();
+    boolean addOrUpdateScoreValue(ScoreValue u);
+    ScoreValue getScoreValueById(int id);
+    boolean deleteScoreValue(int id);
 }

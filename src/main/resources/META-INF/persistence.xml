@@ -17,6 +17,7 @@
     <class>com.nmt.model.Lecturer</class>
     <class>com.nmt.model.User</class>
     <class>com.nmt.model.Staff</class>
+    <class>com.nmt.model.ScoreColumn</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

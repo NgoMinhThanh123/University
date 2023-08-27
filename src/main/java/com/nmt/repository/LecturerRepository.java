@@ -19,4 +19,5 @@ public interface LecturerRepository {
     Lecturer getLecturerById(String id);
     int countLecturers();
     boolean deleteLecturer(String id);
+    Lecturer getLecturerByUsername(String username);
 }

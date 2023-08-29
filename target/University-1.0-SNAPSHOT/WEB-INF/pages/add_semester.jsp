@@ -12,6 +12,11 @@
         <form:errors path="id" element="div" cssClass="text-danger" />
     </div>
     <div class="form-floating mb-3 mt-3">
+        <form:input type="text" class="form-control" path="name" id="name" placeholder="Học kì" name="name" />
+        <label for="schoolYear">Học kì</label>
+        <form:errors path="name" element="div" cssClass="text-danger" />
+    </div>
+    <div class="form-floating mb-3 mt-3">
         <form:input type="text" class="form-control" path="schoolYear" id="schoolYear" placeholder="Năm học" name="schoolYear" />
         <label for="schoolYear">Năm học</label>
         <form:errors path="schoolYear" element="div" cssClass="text-danger" />

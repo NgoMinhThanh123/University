@@ -44,10 +44,18 @@ public class Semester implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull(message = "{semester.id.notNullMsg}")
-    @Size(min = 1, max = 5, message = "{semester.id.lenErrMsg}")
+    @NotBlank
+    @NotNull()
+    @Size(min = 1, max = 5)
     @Column(name = "id")
     private String id;
+    
+    @Basic(optional = false)
+    @NotNull(message = "{semester.name.notNullMsg}")
+    @Size(min = 1, max = 10, message = "{semester.name.lenErrMsg}")
+    @Column(name = "name")
+    private String name;
+    
     @Basic(optional = false)
     @NotNull(message = "{semester.schoolYear.notNullMsg}")
     @Column(name = "school_year")
@@ -76,8 +84,9 @@ public class Semester implements Serializable {
         this.id = id;
     }
 
-    public Semester(String id, int schoolYear, Date fromDate, Date toDate) {
+    public Semester(String id, String name, int schoolYear, Date fromDate, Date toDate) {
         this.id = id;
+        this.name = name;
         this.schoolYear = schoolYear;
         this.fromDate = fromDate;
         this.toDate = toDate;
@@ -132,6 +141,7 @@ public class Semester implements Serializable {
     public void setScoreSet(Set<Score> scoreSet) {
         this.scoreSet = scoreSet;
     }
+    
 
     @Override
     public int hashCode() {
@@ -156,6 +166,20 @@ public class Semester implements Serializable {
     @Override
     public String toString() {
         return "com.nmt.model.Semester[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
     
 }

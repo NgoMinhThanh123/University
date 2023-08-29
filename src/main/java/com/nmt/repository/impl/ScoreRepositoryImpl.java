@@ -6,6 +6,8 @@ package com.nmt.repository.impl;
 
 import com.nmt.model.Score;
 import com.nmt.repository.ScoreRepository;
+import dto.StudentDto;
+import dto.StudentScoreDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -113,46 +115,84 @@ public class ScoreRepositoryImpl implements ScoreRepository {
     }
 
     @Override
-    public List<Score> getScoreByStudentId(String studentId) {
+    public List<StudentScoreDTO> getStudentScores(String lecturerId, String semesterId, String subjectId) {
         Session s = this.factory.getObject().getCurrentSession();
-        List<Score> scores = new ArrayList<>();
+        List<Object[]> objects = new ArrayList<>();
+        List<StudentScoreDTO> studentScoreDTOs = new ArrayList<>();
+
         try {
-            String sql = "SELECT student.name AS student_name, semester.name AS semester_name, semester.school_year, subject.name AS subject_name, score_value.value, score_column.name AS score_column_name\n"
-                    + "FROM score join subject on score.subject_id = subject.id\n"
+            String sql = "SELECT student.id, student.name AS student_name, semester.name AS semester_name, semester.school_year, subject.name AS subject_name, score_value.value, score_column.name AS score_column_name\n"
+                    + "FROM score\n"
+                    + "join subject on score.subject_id = subject.id\n"
                     + "join semester on score.semester_id = semester.id\n"
                     + "join student on score.student_id = student.id\n"
+                    + "join lecturer_subject on lecturer_subject.subject_id = subject.id\n"
+                    + "join lecturer on lecturer_subject.lecturer_id = lecturer.id\n"
                     + "join score_value on score_value.score_id = score.id\n"
                     + "join score_column on score_value.score_column_id = score_column.id\n"
-                    + "where student.id = :studentId";
+                    + "where lecturer.id = :lecturerId and semester.id = :semesterId and subject.id = :subjectId";
             Query query = s.createNativeQuery(sql);
-            query.setParameter("studentId", studentId);
+            query.setParameter("lecturerId", lecturerId);
+            query.setParameter("semesterId", semesterId);
+            query.setParameter("subjectId", subjectId);
 
-            scores = query.getResultList();
+            objects = query.getResultList();
+            for (int i = 0; i < objects.size(); i++) {
+                StudentScoreDTO studentScoreDTO = new StudentScoreDTO();
+                studentScoreDTO.setStudentId(objects.get(i)[0].toString());
+                studentScoreDTO.setStudentName(objects.get(i)[1].toString());
+                studentScoreDTO.setSemesterName(objects.get(i)[2].toString());
+                studentScoreDTO.setSchoolYear(objects.get(i)[3].toString());
+                studentScoreDTO.setSubjectName(objects.get(i)[4].toString());
+                studentScoreDTO.setScoreValue(Double.parseDouble(objects.get(i)[5].toString()));
+                studentScoreDTO.setScoreColumnName(objects.get(i)[6].toString());
+                studentScoreDTOs.add(studentScoreDTO);
+            }
+            System.out.println(studentScoreDTOs);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return scores;
+        return studentScoreDTOs;
     }
+
 
     @Override
-    public List<Score> getStudentScores() {
+    public List<StudentScoreDTO> getListScoresExport(String subjectId, String semesterId) {
         Session s = this.factory.getObject().getCurrentSession();
-        List<Score> scores = new ArrayList<>();
+        List<Object[]> objects = new ArrayList<>();
+        List<StudentScoreDTO> studentScoreDTOs = new ArrayList<>();
+
         try {
-            String sql = "SELECT student.name AS student_name, semester.name AS semester_name, semester.school_year, subject.name AS subject_name, score_value.value, score_column.name AS score_column_name\n"
-                    + "FROM score join subject on score.subject_id = subject.id\n"
+            String sql = "SELECT student.id, student.name AS student_name, semester.name AS semester_name, semester.school_year, subject.name AS subject_name, score_value.value, score_column.name AS score_column_name\n"
+                    + "FROM score\n"
+                    + "join subject on score.subject_id = subject.id\n"
                     + "join semester on score.semester_id = semester.id\n"
                     + "join student on score.student_id = student.id\n"
+                    + "join lecturer_subject on lecturer_subject.subject_id = subject.id\n"
+                    + "join lecturer on lecturer_subject.lecturer_id = lecturer.id\n"
                     + "join score_value on score_value.score_id = score.id\n"
-                    + "join score_column on score_value.score_column_id = score_column.id";
+                    + "join score_column on score_value.score_column_id = score_column.id\n"
+                    + "where semester.id = :semesterId and subject.id = :subjectId";
             Query query = s.createNativeQuery(sql);
+            query.setParameter("semesterId", semesterId);
+            query.setParameter("subjectId", subjectId);
 
-            scores = query.getResultList();
-            System.out.println(scores);
+            objects = query.getResultList();
+            for (int i = 0; i < objects.size(); i++) {
+                StudentScoreDTO studentScoreDTO = new StudentScoreDTO();
+                studentScoreDTO.setStudentId(objects.get(i)[0].toString());
+                studentScoreDTO.setStudentName(objects.get(i)[1].toString());
+                studentScoreDTO.setSemesterName(objects.get(i)[2].toString());
+                studentScoreDTO.setSchoolYear(objects.get(i)[3].toString());
+                studentScoreDTO.setSubjectName(objects.get(i)[4].toString());
+                studentScoreDTO.setScoreValue(Double.parseDouble(objects.get(i)[5].toString()));
+                studentScoreDTO.setScoreColumnName(objects.get(i)[6].toString());
+                studentScoreDTOs.add(studentScoreDTO);
+            }
+            System.out.println(studentScoreDTOs);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return scores;
+        return studentScoreDTOs;
     }
-
 }

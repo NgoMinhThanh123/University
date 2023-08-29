@@ -77,7 +77,7 @@ public class Lecturer implements Serializable {
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull(message = "{lecturer.email.notNullMsg}")
-    @Size(min = 15, max = 50, message = "{lecturer.email.lenErrMsg=}")
+    @Size(min = 15, max = 50, message = "{lecturer.email.lenErrMsg}")
     @Column(name = "email")
     private String email;
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")

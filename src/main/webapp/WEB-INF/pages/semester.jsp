@@ -30,7 +30,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Học kì</th>
                 <th>Năm học</th>
                 <th>Thời gian bắt đầu</th>
                 <th>Thời gian kết thúc</th>               
@@ -40,14 +40,15 @@
         <tbody>
             <c:forEach items="${semester}" var="l">
                 <tr>   
-                    <td>${l.id}</td>
+                    <td>${l.name}</td>
                     <td>${l.schoolYear}</td>
                     <td>${l.fromDate}</td>
                     <td>${l.toDate}</td>
                     <td>
                         <c:url value="/update_semester/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>
-                        <button class="btn btn-danger" onclick="deleteStudent('${api}')">Xóa</button>
+                         <c:url value="/api/update_semester/${l.id}" var="apiDel" />
+                        <button class="btn btn-danger" onclick="deleteFaculty('${apiDel}')">Xóa</button>
                     </td>
                 </tr>
             </c:forEach>

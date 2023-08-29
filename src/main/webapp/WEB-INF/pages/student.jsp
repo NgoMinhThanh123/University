@@ -49,7 +49,8 @@
                     <td>
                          <c:url value="/update_student/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>
-                        <button class="btn btn-danger" onclick="deleteStudent('${api}')">Xóa</button>
+                        <c:url value="/api/update_student/${l.id}" var="apiDel" />
+                        <button class="btn btn-danger" onclick="deleteFaculty('${apiDel}')">Xóa</button>
                     </td>
                 </tr>
             </c:forEach>

@@ -18,7 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -41,14 +40,15 @@ public class ScoreValue implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "value")
     private double value;
     @JoinColumn(name = "score_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Score scoreId;
     @JoinColumn(name = "score_column_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private ScoreColumn scoreColumnId;
 
     public ScoreValue() {

@@ -32,7 +32,11 @@ public class ApiSemesterController {
     
     @GetMapping("/semesters/")
     @CrossOrigin
-    public ResponseEntity<List<Semester>> list(@RequestParam Map<String, String> params) {
-        return new ResponseEntity<>(this.semesterService.getSemesters(params), HttpStatus.OK);
+    public ResponseEntity<List<Semester>> list( @RequestParam String lecturerId) {
+        List<Semester> list = this.semesterService.getSemesterByLecturerId(lecturerId);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

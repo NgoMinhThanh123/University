@@ -50,4 +50,10 @@ public class SemesterServiceImpl implements SemesterService {
     public int countSemesters() {
         return this.semesRepo.countSemesters();
     }
+
+
+    @Override
+    public List<Semester> getSemesterByLecturerId(String lecturerId) {
+        return this.semesRepo.getSemesterByLecturerId(lecturerId);
+    }
 }

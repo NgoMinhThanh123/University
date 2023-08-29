@@ -7,7 +7,7 @@
 <c:url value="/add_class" var="action" />
 <form:form modelAttribute="add_class" action="${action}" method="post">
     <div class="form-floating mb-3 mt-3">
-        <form:input type="text" class="form-control" path="id" id="id" placeholder="ID" name="id" />
+        <form:input required="true" type="text" class="form-control" path="id" id="id" placeholder="ID" name="id" />
         <label for="id">ID</label>
         <form:errors path="id" element="div" cssClass="text-danger" />
     </div>

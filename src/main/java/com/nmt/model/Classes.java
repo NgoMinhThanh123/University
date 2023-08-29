@@ -39,8 +39,8 @@ public class Classes implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull(message = "{notNullMsg}")
-    @Size(min = 1, max = 8)
+    @NotNull(message = "{classes.id.notNullMsg}")
+    @Size(min = 1, max = 8, message = "{classes.id.lenErrMsg}")
     @Column(name = "id")
     private String id;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classesId")
@@ -48,7 +48,6 @@ public class Classes implements Serializable {
     private Set<Student> studentSet;
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Faculty facultyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classId")
     @JsonIgnore

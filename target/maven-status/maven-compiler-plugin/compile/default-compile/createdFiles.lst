@@ -35,6 +35,7 @@ com\nmt\repository\impl\LecturerRepositoryImpl.class
 com\nmt\controllers\ApiClassController.class
 com\nmt\service\impl\LectureServiceImpl.class
 com\nmt\model\StudentSubject.class
+dto\StudentScoreDTO.class
 com\nmt\controllers\ApiMajorController.class
 com\nmt\service\impl\FacultyServiceImpl.class
 com\nmt\repository\UserRepository.class
@@ -85,6 +86,7 @@ com\nmt\model\ClassesSubject.class
 com\nmt\service\impl\ScoreServiceImpl.class
 com\nmt\controllers\ApiScoreColumnController.class
 com\nmt\formatters\ClassFormatter.class
+utils\CSVUtils.class
 com\nmt\repository\SemesterRepository.class
 com\nmt\fillers\JwtAuthenticationTokenFilter.class
 com\nmt\service\SemesterService.class

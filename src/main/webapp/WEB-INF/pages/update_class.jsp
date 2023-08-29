@@ -6,6 +6,7 @@
 <h1 class="text-center text-info mt-1">CẬP NHẬT LỚP</h1>
 <c:url value="/update_class" var="action" />
 <form:form modelAttribute="update_class" action="${action}" method="post">
+    <form:hidden path="id" />
     <div class="form-floating mb-3 mt-3">
         <form:input disabled="true" type="text" class="form-control" path="id" id="id" placeholder="ID" name="id" />
         <label for="id">ID</label>

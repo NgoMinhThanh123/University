@@ -84,9 +84,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public boolean addStudent(Student c) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
-            if (c.getId() == null) {
-                s.save(c);
-            }
+            s.save(c);
             return true;
         } catch (HibernateException ex) {
             ex.printStackTrace();
@@ -98,9 +96,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public boolean updateStudent(Student c) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
-            if (c.getId() != null) {
-                s.update(c);
-            }
+            s.update(c);
 
             return true;
         } catch (HibernateException ex) {
@@ -155,13 +151,13 @@ public class StudentRepositoryImpl implements StudentRepository {
                     + "join lecturer on lecturer.id = lecturer_subject.lecturer_id "
                     + "WHERE subject.id = :subjectId AND lecturer.id = :lecturerId";
 
-        Query query = s.createNativeQuery(sql);
-        query.setParameter("subjectId", subjectId);
-        query.setParameter("lecturerId", lecturerId);
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("subjectId", subjectId);
+            query.setParameter("lecturerId", lecturerId);
 
-        students = query.getResultList();
+            students = query.getResultList();
         } catch (Exception e) {
-             e.printStackTrace();
+            e.printStackTrace();
         }
 
         return students;

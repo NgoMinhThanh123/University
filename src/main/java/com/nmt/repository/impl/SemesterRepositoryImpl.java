@@ -24,7 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class SemesterRepositoryImpl implements SemesterRepository{
+public class SemesterRepositoryImpl implements SemesterRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
     @Autowired
@@ -94,8 +95,9 @@ public class SemesterRepositoryImpl implements SemesterRepository{
     public boolean updateSemester(Semester m) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
-            if(m.getId() != null)
+            if (m.getId() != null) {
                 s.update(m);
+            }
 
             return true;
         } catch (HibernateException ex) {
@@ -111,5 +113,26 @@ public class SemesterRepositoryImpl implements SemesterRepository{
 
         return Integer.parseInt(q.getSingleResult().toString());
     }
-    
+
+    @Override
+    public List<Semester> getSemesterByLecturerId(String lecturerId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        List<Semester> semesters = new ArrayList<>();
+        try {
+            String sql = "SELECT DISTINCT semester.id, semester.name, semester.school_year\n"
+                    + "FROM semester\n"
+                    + "join score on score.semester_id = semester.id\n"
+                    + "join subject on score.subject_id = subject.id\n"
+                    + "join lecturer_subject on lecturer_subject.subject_id = subject.id\n"
+                    + "join lecturer on lecturer_subject.lecturer_id = lecturer.id\n"
+                    + "where lecturer.id = :lecturerId";
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("lecturerId", lecturerId);
+            semesters = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return semesters;
+    }
+
 }

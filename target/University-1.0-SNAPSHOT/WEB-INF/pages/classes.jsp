@@ -44,7 +44,8 @@
                     <td>
                         <c:url value="/update_class/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>
-                        <button class="btn btn-danger" onclick="deleteFaculty('${api}')">Xóa</button>
+                        <c:url value="/api/update_class/${l.id}" var="apiDel" />
+                        <button class="btn btn-danger" onclick="deleteFaculty('${apiDel}')">Xóa</button>
                     </td>
                 </tr>
             </c:forEach>

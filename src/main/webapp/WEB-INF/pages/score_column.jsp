@@ -44,7 +44,8 @@
                     <td>
                         <c:url value="/add_score_column/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>
-                        <button class="btn btn-danger" onclick="deleteFaculty('${api}')">Xóa</button>
+                        <c:url value="/api/delete_score_column/${l.id}" var="apiDel" />
+                        <button class="btn btn-danger" onclick="deleteScoreColumn('${apiDel}', ${l.id})">Xóa</button>
                     </td>
                 </tr>
             </c:forEach>

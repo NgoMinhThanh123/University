@@ -5,6 +5,7 @@
 package com.nmt.repository;
 
 import com.nmt.model.Score;
+import dto.StudentScoreDTO;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,8 @@ public interface ScoreRepository {
     int countScores();
     boolean addOrUpdateScore(Score u);
     Score getScoreById(int id);
-    List<Score> getScoreByStudentId(String studentId);
-    List<Score> getStudentScores();
+//    List<Score> getScoreByStudentAndLecturerId(String studentId, String lecturerId, String semesterId, String subjectId);
+    List<StudentScoreDTO> getStudentScores(String lecturerId, String semesterId, String subjectId);
+    List<StudentScoreDTO> getListScoresExport(String subjectId, String semesterId);
     boolean deleteScore(int id);
 }

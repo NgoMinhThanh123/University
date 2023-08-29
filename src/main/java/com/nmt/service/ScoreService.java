@@ -18,7 +18,8 @@ public interface ScoreService {
     int countScores();
     boolean addOrUpdateScore(Score u);
     Score getScoreById(int id);
-    List<Score> getScoreByStudentId(String studentId);
-    List<StudentScoreDTO> getStudentScores();
+//    List<Score> getScoreByStudentAndLecturerId(String studentId, String lecturerId, String semesterId, String subjectId);
+    List<StudentScoreDTO> getStudentScores(String lecturerId, String semesterId, String subjectId);
+    List<StudentScoreDTO> getListScoresExport(String subjectId, String semesterId);
     boolean deleteScore(int id);
 }

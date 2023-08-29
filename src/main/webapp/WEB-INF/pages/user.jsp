@@ -62,7 +62,8 @@
                     <td>
                         <c:url value="/add_user/${l.id}" var="api" />
                         <a href="${api}" class="btn btn-info">Cập nhật</a>
-                        <button class="btn btn-danger" onclick="deleteUser('${api}')">Xóa</button>
+                        <c:url value="/api/add_user/${l.id}" var="apiDel" />
+                        <button class="btn btn-danger" onclick="deleteScoreColumn('${apiDel}', ${l.id})">Xóa</button>
                     </td>
                 </tr>
             </c:forEach>

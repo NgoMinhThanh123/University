@@ -73,9 +73,10 @@ public class ClassesRepositoryImpl implements ClassesRepository{
     public boolean addClass(Classes c) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
-            if (c.getId() == null) {
+            if (c.getId() != null) {
                 s.save(c);
             }
+            System.out.println(s);
 
             return true;
         } catch (HibernateException ex) {

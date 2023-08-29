@@ -9,10 +9,6 @@
 <c:url value="/add_score" var="action" />
 <form:form modelAttribute="add_score" action="${action}" method="post" >
     <form:hidden path="id" />
-    <div class="form-floating mb-3 mt-3">
-        <form:input disabled = "true" type="text" class="form-control" path="id" id="id" placeholder="id" name="id" />
-        <label for="value">ID</label>
-    </div>
     <div class="form-floating">
         <form:select class="form-select" id="subject" name="subject" path="subjectId">          
             <c:forEach items="${subject}" var="f">

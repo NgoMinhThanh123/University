@@ -69,6 +69,7 @@ public class ApiStudentController {
     }
     
     @GetMapping(path = "/get-list-student/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
     public ResponseEntity<List<Student>> getStudentsBySubjectAndLecturer(
             @RequestParam String subjectId,
             @RequestParam String lecturerId) {

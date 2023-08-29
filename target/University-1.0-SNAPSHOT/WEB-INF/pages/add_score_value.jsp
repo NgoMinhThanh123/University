@@ -8,10 +8,7 @@
 
 <c:url value="/add_score_value" var="action" />
 <form:form modelAttribute="add_score_value" action="${action}" method="post" >
-    <div class="form-floating mb-3 mt-3">
-        <form:input disabled = "true" type="text" class="form-control" path="id" id="id" placeholder="id" name="id" />
-        <label for="value">ID</label>
-    </div>
+    <form:hidden path="id" />
     <div class="form-floating mb-3 mt-3">
         <form:input type="text" class="form-control" path="value" id="value" placeholder="Điểm số" name="value" />
         <label for="value">Điểm số</label>

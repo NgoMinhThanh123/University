@@ -5,9 +5,7 @@
 package com.nmt.controllers;
 
 import com.nmt.model.Score;
-import com.nmt.model.ScoreValue;
 import com.nmt.service.ScoreService;
-import com.nmt.service.ScoreValueService;
 import com.nmt.service.SemesterService;
 import com.nmt.service.StudentService;
 import com.nmt.service.SubjectService;

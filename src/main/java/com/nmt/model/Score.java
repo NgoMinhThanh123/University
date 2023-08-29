@@ -52,8 +52,7 @@ public class Score implements Serializable {
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Subject subjectId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "scoreId")
-    @JsonIgnore
+    @OneToMany(mappedBy = "scoreId")
     private Set<ScoreValue> scoreValueSet;
 
     public Score() {

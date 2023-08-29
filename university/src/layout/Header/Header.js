@@ -2,6 +2,7 @@ import { Button, Container, Nav, Navbar} from "react-bootstrap";
 import { MyUserContext } from "../../App";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import './Header.css'
 
 const Header = () => {
   const [user, dispatch] = useContext(MyUserContext);
@@ -14,7 +15,7 @@ const Header = () => {
 
     return (
     <>
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary back-ground">
       <Container>
         <Navbar.Brand href="#home">Quản lý sinh viên</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -27,7 +28,11 @@ const Header = () => {
                   Sinh viên
                 </Link>
               )}
-            <Link className="nav-link" to="/score">Điểm</Link>
+              {user.role === "ROLE_SINHVIEN" && (
+                <Link className="nav-link" to="/score">
+                  Điểm
+                </Link>
+              )}
             <Link className="nav-link" to="/forum">Diễn đàn</Link>
             <Link className="nav-link" to="/chat">Chat</Link>
             {user === null ? <Link className="nav-link" to="/login">Đăng nhập</Link>:<>

@@ -14,10 +14,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudentScoreDTO {
-    private String studentName;
+    private String subjectName;
     private String semesterName;
     private String schoolYear;
-    private String subjectName;
-    private double scoreValue;
+    private String studentId;
+    private String studentName;
     private String scoreColumnName;
+    private double scoreValue;
 }

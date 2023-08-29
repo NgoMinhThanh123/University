@@ -68,11 +68,9 @@ public class ScoreValueController {
     @PostMapping("/add_score_value")
     public String add(@ModelAttribute(value = "add_score_value") @Valid ScoreValue u,
             BindingResult rs) {
-//        if (!rs.hasErrors()) {
-            if (this.scoreValueService.addOrUpdateScoreValue(u) == true) {
-                return "redirect:/score_value";
-            }
-//        }
+        if (this.scoreValueService.addOrUpdateScoreValue(u) == true) {
+            return "redirect:/score_value";
+        }
         return "add_score_value";
     }
 }

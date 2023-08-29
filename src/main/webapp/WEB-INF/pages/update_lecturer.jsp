@@ -7,7 +7,6 @@
 <c:url value="/update_lecturer" var="action" />
 <form:form modelAttribute="update_lecturer" action="${action}" method="post">
     <form:hidden path="id" />
-    <form:hidden path="birthday" />
     <div class="form-floating mb-3 mt-3">
         <form:input disabled="true" type="text" class="form-control" path="id" id="id" placeholder="ID" name="id" />
         <label for="id">ID</label>

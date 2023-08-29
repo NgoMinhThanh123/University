@@ -47,14 +47,20 @@ public class ScoreServiceImpl implements ScoreService{
         return this.scoreRepo.countScores();
     }
 
+//    @Override
+//    public List<Score> getScoreByStudentId(String studentId) {
+//        return this.scoreRepo.getScoreByStudentId(studentId);
+//    }
+
+
     @Override
-    public List<Score> getScoreByStudentId(String studentId) {
-        return this.scoreRepo.getScoreByStudentId(studentId);
+    public List<StudentScoreDTO> getStudentScores(String lecturerId, String semesterId, String subjectId) {
+        return this.scoreRepo.getStudentScores(lecturerId, semesterId, subjectId);
     }
 
-//    @Override
-//    public List<StudentScoreDTO> getStudentScores() {
-//        return this.scoreRepo.getStudentScores();
-//    }
+    @Override
+    public List<StudentScoreDTO> getListScoresExport(String subjectId, String semesterId) {
+        return this.scoreRepo.getListScoresExport(semesterId, subjectId);
+    }
     
 }

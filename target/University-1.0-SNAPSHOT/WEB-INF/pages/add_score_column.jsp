@@ -10,10 +10,6 @@
 <form:form modelAttribute="add_score_column" action="${action}" method="post" >
     <form:hidden path="id" />
     <div class="form-floating mb-3 mt-3">
-        <form:input disabled = "true" type="text" class="form-control" path="id" id="id" placeholder="id" name="id" />
-        <label for="value">ID</label>
-    </div>
-    <div class="form-floating mb-3 mt-3">
         <form:input type="text" class="form-control" path="name" id="name" placeholder="Năm học" name="name" />
         <label for="name">Tên cột điểm</label>
     </div>

@@ -43,12 +43,11 @@ public class ScoreColumn implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @NotNull(message = "{score_column.name.notNullMsg}")
+    @Size(min = 1, max = 20, message = "{score_column.name.lenErrMsg}")
     @Column(name = "name")
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "scoreColumnId")
-    @JsonIgnore
     private Set<ScoreValue> scoreValueSet;
 
     public ScoreColumn() {

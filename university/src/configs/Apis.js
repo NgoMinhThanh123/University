@@ -12,12 +12,19 @@ export const endpoints = {
     "semester": `${SERVER_CONTEXT}/api/semesters/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
     "get-user": `${SERVER_CONTEXT}/api/users/{username}/`,
+    "user-id": `${SERVER_CONTEXT}/api/users-id/{id}/`,
     "get-student-by-username": `${SERVER_CONTEXT}/api/students-un/{username}/`,
     "get-lecturer-by-username": `${SERVER_CONTEXT}/api/lecturers-un/{username}/`,
     "get-student-by-lecturer-subject-id": `${SERVER_CONTEXT}/api/get-list-student/`,
     "get-subject-by-lecturerId": `${SERVER_CONTEXT}/api/subjects/{lecturerId}/`,
     "get-list-scores": `${SERVER_CONTEXT}/api/scores/`,
+    "score-student": `${SERVER_CONTEXT}/api/scores/student-id/`,
     "export": `${SERVER_CONTEXT}/api/scores/export-csv/`,
+    "posts": `${SERVER_CONTEXT}/api/posts/`,
+    "details": (postId) => `${SERVER_CONTEXT}/api/posts/${postId}/`,
+    "comments":`${SERVER_CONTEXT}/api/posts/{id}/comments/`,
+    "add-comment": `${SERVER_CONTEXT}/api/comments/`,
+    "add-post": `${SERVER_CONTEXT}/api/add-post/`,
 }
 
 export const authApi = () => {

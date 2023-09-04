@@ -16,6 +16,7 @@
     "i": "^0.3.7",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.6.0",
+    "moment": "^2.29.4",
     "node-sass": "^7.0.3",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",

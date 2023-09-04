@@ -267,7 +267,7 @@ const Student = () => {
                                 onChange={handleFileChange}
                             />
                         </Button>
-                        <Button className="btnExport" onClick={exportToPDF}>Xuất PDF</Button>
+                        <Button className="btnExportPDF" onClick={exportToPDF}>Xuất PDF</Button>
                     </div>
                     {csvData.length > 0 && (
                         <div>

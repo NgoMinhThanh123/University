@@ -5,13 +5,13 @@
 package com.nmt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -32,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Entity
 @Table(name = "user")
 @XmlRootElement
-@JsonIgnoreProperties("file")
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
@@ -43,8 +43,10 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar")})
 public class User implements Serializable {
 
+    
+
     private static final long serialVersionUID = 1L;
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
@@ -84,6 +86,10 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Student> studentSet;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+//    private Set<Comment> commentSet;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+//    private Set<Post> postSet;
 
     public User() {
     }
@@ -148,33 +154,8 @@ public class User implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-     /**
-     * @return the lecturerSet
-     */
-    public Set<Lecturer> getLecturerSet() {
-        return lecturerSet;
-    }
-
-    /**
-     * @param lecturerSet the lecturerSet to set
-     */
-    public void setLecturerSet(Set<Lecturer> lecturerSet) {
-        this.lecturerSet = lecturerSet;
-    }
-
-    /**
-     * @return the studentSet
-     */
-    public Set<Student> getStudentSet() {
-        return studentSet;
-    }
-
-    /**
-     * @param studentSet the studentSet to set
-     */
-    public void setStudentSet(Set<Student> studentSet) {
-        this.studentSet = studentSet;
-    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -214,5 +195,29 @@ public class User implements Serializable {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
+
+//    @XmlTransient
+//    public Set<Post> getPostSet() {
+//        return postSet;
+//    }
+//
+//    public void setPostSet(Set<Post> postSet) {
+//        this.postSet = postSet;
+//    }
+
+    /**
+     * @return the commentSet
+     */
+//    public Set<Comment> getCommentSet() {
+//        return commentSet;
+//    }
+//
+//    /**
+//     * @param commentSet the commentSet to set
+//     */
+//    public void setCommentSet(Set<Comment> commentSet) {
+//        this.commentSet = commentSet;
+//    }
+    
     
 }

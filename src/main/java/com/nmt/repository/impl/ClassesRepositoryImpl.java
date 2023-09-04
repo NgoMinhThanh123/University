@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class ClassesRepositoryImpl implements ClassesRepository{
-     @Autowired
+    @Autowired
     private LocalSessionFactoryBean factory;
      @Autowired
     private Environment env;

@@ -45,11 +45,22 @@ public class ApiScoreController {
 
     @GetMapping(path = "/scores/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
-    public ResponseEntity<List<StudentScoreDTO>> getScoresByStudentId(
+    public ResponseEntity<List<StudentScoreDTO>> getScoresById(
             @RequestParam String lecturerId,
             @RequestParam String semesterId,
             @RequestParam String subjectId) {
         List<StudentScoreDTO> list = scoreService.getStudentScores(lecturerId, semesterId, subjectId);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
+    @GetMapping(path = "/scores/student-id/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<List<StudentScoreDTO>> getScoresByStudentId(
+            @RequestParam String studentId) {
+        List<StudentScoreDTO> list = scoreService.getScoreByStudentId(studentId);
         if (list == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -1,5 +1,5 @@
 .studentHome{
-    background-color: rgb(173, 214, 214);
+    background-color: #ced3d6;
     height: 90vh;
     padding: 5px;
 }
@@ -34,4 +34,9 @@
     margin-right: 5px;
 }
 
+.btnExportPDF{
+    margin: 5px;
+}
+
 .whiteColor{color: white;}
+

@@ -35,12 +35,10 @@ const Login = () => {
                     "username": username,
                     "password": password
                 });
-                console.log(res.data);
                 cookie.save("token", res.data);
 
                 let { data } = await authApi().get(endpoints['current-user']);
                 cookie.save("user", data);
-                console.info(data);
 
                 dispatch({
                     "type": "login",
@@ -51,19 +49,16 @@ const Login = () => {
                     const u = await getUserByUsername(username);
                     if (u) {
                         const studentUsername = u.username;
-                        console.log('Student Username:', studentUsername);
 
                         // Fetch student information
                         const studentInfo = await authApi().get(endpoints['get-student-by-username'].replace("{username}", studentUsername));
-                        console.log('Student info:', studentInfo);
 
                         const userEmail = u.email; // Lấy email của người dùng
-                        console.log('User Email:', userEmail);
                         await signInWithEmailAndPassword(auth, userEmail, password);
                         navigate("/")
                     } else {
                         console.log('User not found');
-
+                        setErr(true);
                     }
 
                 } catch (err) {
@@ -71,6 +66,7 @@ const Login = () => {
                 }
             } catch (err) {
                 console.error(err);
+                setErr(true);
             }
         }
 
@@ -84,6 +80,11 @@ const Login = () => {
     return <>
         <Form onSubmit={login} className="Auth-form-container">
             <div className="Auth-form">
+            {err && (
+                <Alert variant="danger">
+                    Tên người dùng hoặc mật khẩu không chính xác. Vui lòng thử lại.
+                </Alert>
+            )}
                 <div className="Auth-form-content">
                     <h3 className="Auth-form-title">Đăng nhập</h3>
                     <div className="form-group mt-3">

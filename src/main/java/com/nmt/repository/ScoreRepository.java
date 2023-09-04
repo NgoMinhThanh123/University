@@ -18,7 +18,7 @@ public interface ScoreRepository {
     int countScores();
     boolean addOrUpdateScore(Score u);
     Score getScoreById(int id);
-//    List<Score> getScoreByStudentAndLecturerId(String studentId, String lecturerId, String semesterId, String subjectId);
+    List<StudentScoreDTO> getScoreByStudentId(String studentId);
     List<StudentScoreDTO> getStudentScores(String lecturerId, String semesterId, String subjectId);
     List<StudentScoreDTO> getListScoresExport(String subjectId, String semesterId);
     boolean deleteScore(int id);

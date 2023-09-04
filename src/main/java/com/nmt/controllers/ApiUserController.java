@@ -60,6 +60,7 @@ public class ApiUserController {
         return new ResponseEntity<>(this.userService.getUByUn(username), HttpStatus.OK);
     }
     
+    
     @PostMapping("/login/")
     @CrossOrigin
     public ResponseEntity<String> login(@RequestBody User user) {
@@ -90,6 +91,13 @@ public class ApiUserController {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
    }
+    
+    @GetMapping(path = "/users-id/{id}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<User> getUserById(@PathVariable(value = "id")int id) {
+        User u = this.userService.getUserById(id);
+        return new ResponseEntity<>(u, HttpStatus.OK);
+    }
   
     
     @GetMapping(path = "/current-user/", produces = MediaType.APPLICATION_JSON_VALUE)

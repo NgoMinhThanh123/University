@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-const CommentForm = ({ questionId, onCommentSubmit }) => {
+const CommentPost = ({ questionId, onCommentSubmit }) => {
   const [comment, setComment] = useState('');
 
   const handleSubmit = (e) => {
@@ -29,4 +29,4 @@ const CommentForm = ({ questionId, onCommentSubmit }) => {
   );
 };
 
-export default CommentForm;
+export default CommentPost;

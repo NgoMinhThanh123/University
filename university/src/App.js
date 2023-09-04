@@ -10,10 +10,12 @@
   import HomeChat from "./components/Chat/HomeChat";
 import Score from "./components/Score/Score";
 import Profile from "./components/Profile/Profile";
-import QuestionList from "./components/Forum/QuestionList";
 import Student from "./components/Student/Student";
+import InputScore from "./components/InputScore/InputScore";
+import Post from "./components/Forum/Post";
+import PostDetail from "./components/Forum/PostDetail";
 
-  export const MyUserContext = createContext();
+export const MyUserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -45,7 +47,9 @@ export const useUser = () => useContext(MyUserContext);
           <Route path="/score" element={ <ProtectedRoute><BaseLayout><Score /></BaseLayout></ProtectedRoute>} />
           <Route path="/student" element={ <ProtectedRoute><BaseLayout><Student /></BaseLayout></ProtectedRoute>} />
           <Route path="/profile" element={ <ProtectedRoute><BaseLayout><Profile /></BaseLayout></ProtectedRoute>} />
-          <Route path="/forum" element={ <ProtectedRoute><BaseLayout><QuestionList /></BaseLayout></ProtectedRoute>} />
+          <Route path="/input-score" element={ <ProtectedRoute><BaseLayout><InputScore /></BaseLayout></ProtectedRoute>} />
+          <Route path="/posts" element={ <ProtectedRoute><BaseLayout><Post /></BaseLayout></ProtectedRoute>} />
+          <Route path="/posts/:postId" element={ <ProtectedRoute><BaseLayout><PostDetail /></BaseLayout></ProtectedRoute>} />
           {/* <Route path="/" element={ <BaseLayout><Home /></BaseLayout> }/>
           <Route path="/chat" element={<BaseLayout><HomeChat /></BaseLayout> }/> */}
           <Route path="/login" element={<Login />} />

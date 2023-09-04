@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.nmt.repository.impl;
 
 import com.nmt.model.User;
@@ -171,5 +175,4 @@ public class UserRepositoryImpl implements UserRepository{
 
         return Integer.parseInt(q.getSingleResult().toString());
     }
-    
 }

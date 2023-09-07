@@ -47,7 +47,7 @@ public class ApiSubjectController {
     @GetMapping(path = "/subjects/{lecturerId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Subject>> getSubjectByLecturerId(@PathVariable(value = "lecturerId") String lecturerId) {
         List<Subject> list = subjectService.getSubjectByLecturerId(lecturerId);
-        if (list == null) {
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -56,9 +56,21 @@ public class ApiSubjectController {
     @GetMapping(path = "/subjects/studentId/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Subject>> getSubjectByStudentId(@RequestParam String studentId) {
         List<Subject> list = subjectService.getSubjectByStudentId(studentId);
-        if (list == null) {
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+    
+     @GetMapping(path = "/subjects/studentId-semesterId/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Subject>> getSubjectByStudentAndSemesterId(
+            @RequestParam String studentId,
+            @RequestParam String semesterId) {
+        List<Subject> list = subjectService.getSubjectByStudentAndSemesterId(studentId, semesterId);
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
 }

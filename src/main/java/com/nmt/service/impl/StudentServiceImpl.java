@@ -5,9 +5,13 @@
 package com.nmt.service.impl;
 
 import com.nmt.model.Student;
+import com.nmt.repository.ScoreRepository;
 import com.nmt.repository.StudentRepository;
 import com.nmt.service.StudentService;
+import dto.ScoreDto;
+import dto.StuScoreDto;
 import dto.StudentDto;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,8 @@ import org.springframework.stereotype.Service;
 public class StudentServiceImpl implements StudentService{
     @Autowired
     private StudentRepository studentRepo;
+    @Autowired
+    private ScoreRepository scoreRepo;
 
     @Override
     public List<Student> getStudents(Map<String, String> params) {
@@ -65,8 +71,22 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Student> getListStudentBySubjectAndLecturer(String lectureId, String subjectId) {
-        return this.studentRepo.getListStudentBySubjectAndLecturer(lectureId, subjectId);
+    public List<StuScoreDto> getListStudent(String lectureId, String subjectId, String semesterId) {
+        List<Student> students = this.studentRepo.getListStudent(lectureId, subjectId, semesterId);
+        List<StuScoreDto> stuScoreDtos = new ArrayList<>();
+        for(int i = 0; i < students.size(); i++){
+            Student student = students.get(i);
+            StuScoreDto stuScoreDto = new StuScoreDto();
+            List<ScoreDto> scoreDtos = this.scoreRepo.getScoreByStudentId(student.getId(), subjectId, semesterId);
+        
+            stuScoreDto.setStudentId(student.getId());
+            stuScoreDto.setStudentName(student.getName());
+            stuScoreDto.setStudentBithday(student.getBirthday());
+            stuScoreDto.setScoreDto(scoreDtos);       
+            stuScoreDtos.add(stuScoreDto);
+        }
+        
+        return stuScoreDtos;
     }
 
     @Override

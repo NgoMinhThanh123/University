@@ -59,15 +59,18 @@ public class Subject implements Serializable {
     private Set<SubjectSemester> subjectSemesterSet;
     @JoinColumn(name = "faculty_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @JsonIgnore
     private Faculty facultyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<Score> scoreSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<LecturerSubject> lecturerSubjectSet;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
     private Set<StudentSubject> studentSubjectSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subjectId")
+    @JsonIgnore
     private Set<ClassesSubject> classesSubjectSet;
 
     public Subject() {

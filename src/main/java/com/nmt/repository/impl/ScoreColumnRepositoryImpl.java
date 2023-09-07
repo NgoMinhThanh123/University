@@ -112,5 +112,13 @@ public class ScoreColumnRepositoryImpl implements ScoreColumnRepository{
 
         return Integer.parseInt(q.getSingleResult().toString());
     }
+
+    @Override
+    public boolean addScoreColumn(ScoreColumn u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.save(u);
+        
+        return true;
+    }
     
 }

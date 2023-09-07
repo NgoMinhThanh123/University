@@ -110,5 +110,12 @@ public class ScoreValueRepositoryImpl implements ScoreValueRepository{
 
         return Integer.parseInt(q.getSingleResult().toString());
     }
+
+    @Override
+    public ScoreValue addScoreValue(ScoreValue u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.save(u);
+        return u;
+    }
     
 }

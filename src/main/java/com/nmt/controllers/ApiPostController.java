@@ -39,7 +39,7 @@ public class ApiPostController {
     @CrossOrigin
     public ResponseEntity<List<Post>> list(Map<String, String> params) {
         List<Post> list = postService.getPosts(params);
-        if (list == null) {
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -59,7 +59,7 @@ public class ApiPostController {
     @CrossOrigin
     public ResponseEntity<List<Comment>> getSubjectByLecturerId(@PathVariable(value = "postId") int postId) {
         List<Comment> list = commentService.getCommentByPostId(postId);
-        if (list == null) {
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);

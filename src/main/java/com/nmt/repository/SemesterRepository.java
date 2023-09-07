@@ -19,5 +19,6 @@ public interface SemesterRepository {
     boolean updateSemester(Semester m);
     Semester getSemesterById(String id);
     List<Semester> getSemesterByLecturerId(String lecturerId);
+    List<Semester> getSemesterByStudentId(String studentId);
     boolean deleteSemester(String id);
 }

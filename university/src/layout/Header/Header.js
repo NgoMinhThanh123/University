@@ -17,32 +17,32 @@ const Header = () => {
     <>
       <Navbar expand="lg" className="back-ground">
         <Container>
-          <Navbar.Brand href="#home">Quản lý sinh viên</Navbar.Brand>
+          <Navbar.Brand style={{color:"black"}} ><img class="default-logo dark-version" alt="TRƯỜNG ĐẠI HỌC MỞ TP HCM" src="https://ou.edu.vn/wp-content/uploads/2016/08/Logo.png" style={{height: "79px"}} /></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Link className="nav-link" to="/">Trang chủ</Link>
-              <Link className="nav-link" to="/profile">Hồ sơ</Link>
+              <Link style={{color:"black"}} className="nav-link" to="/">Trang chủ</Link>
+              <Link style={{color:"black"}} className="nav-link" to="/profile">Hồ sơ</Link>
               {user.role === "ROLE_GIANGVIEN" && (
-                <Link className="nav-link" to="/student">
+                <Link style={{color:"black"}} className="nav-link"  to="/student">
                   Sinh viên
                 </Link>
               )}
               {user.role === "ROLE_GIANGVIEN" && (
-                <Link className="nav-link" to="/input-score">
+                <Link style={{color:"black"}} className="nav-link" to="/input-score">
                 Nhập điểm
                 </Link>
               )}
               {user.role === "ROLE_SINHVIEN" && (
-                <Link className="nav-link" to="/score">
+                <Link style={{color:"black"}} className="nav-link" to="/score">
                   Điểm
                 </Link>
               )}
-              <Link className="nav-link" to="/posts">Diễn đàn</Link>
-              <Link className="nav-link" to="/chat">Chat</Link>
-              {user === null ? <Link className="nav-link" to="/login">Đăng nhập</Link> : <>
-                <Link className="nav-link" to="/login">Chào {user.username}!</Link>
-                <Link className="nav-link" variant="secondary" onClick={logout} to="/login">Đăng xuất</Link>
+              <Link style={{color:"black"}} className="nav-link" to="/posts">Diễn đàn</Link>
+              <Link  style={{color:"black"}} className="nav-link" to="/chat">Chat</Link>
+              {user === null ? <Link style={{color:"black"}} className="nav-link" to="/login">Đăng nhập</Link> : <>
+                <Link style={{color:"black"}} className="nav-link" >Chào {user.username}!</Link>
+                <Link style={{color:"black"}} className="nav-link" variant="secondary" onClick={logout} to="/login">Đăng xuất</Link>
               </>}
             </Nav>
           </Navbar.Collapse>

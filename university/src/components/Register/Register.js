@@ -10,6 +10,176 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Register = () => {
+
+    const [user, setUser] = useState({
+        username: '',
+        password: '',
+        confirmPass: '',
+        email: '',
+        avatar: null,
+    });
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const change = (e, field) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            [field]: e.target.value,
+        }));
+    };
+    const handleAvatarChange = (e) => {
+        setUser((prevUser) => ({
+            ...prevUser,
+            avatar: e.target.files[0],
+        }));
+    };
+
+    const handleRegister = async (e) => {
+        try {
+            e.preventDefault();
+            setLoading(true);
+
+            if (user.password !== user.confirmPass) {
+                setErrorMessage('Mật khẩu xác nhận không khớp');
+                setLoading(false);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('username', user.username);
+            formData.append('password', user.password);
+            formData.append('email', user.email);
+            formData.append('avatar', user.avatar);
+
+
+            const response = await Apis.post(endpoints['register'], formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Important: set content type for file upload
+                },
+            });
+
+            if (response.status === 201) {
+                const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
+
+                const date = new Date().getTime();
+                const storageRef = ref(storage, `${user.username + date}`);
+
+                await uploadBytesResumable(storageRef, user.avatar).then(() => {
+                    getDownloadURL(storageRef).then(async (downloadURL) => {
+                        try {
+                            await updateProfile(res.user, {
+                                displayName: user.username,
+                                photoURL: downloadURL,
+                            });
+
+                            await setDoc(doc(db, "users", res.user.uid), {
+                                uid: res.user.uid,
+                                username: user.username,
+                                email: user.email,
+                                photoURL: downloadURL,
+                            });
+
+                            await setDoc(doc(db, "userChats", res.user.uid), {});
+                            navigate("/");
+                        } catch (err) {
+                            console.log(err);
+                            setErrorMessage('Đã xảy ra lỗi khi cập nhật hồ sơ');
+                        }
+                    });
+                });
+            } else {
+                setErrorMessage(response.data);
+            }
+        } catch (err) {
+            setErrorMessage(err.response?.data || err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    return <>
+        <Form onSubmit={handleRegister} className="Auth-form-container">
+            <div className="Auth-form">
+                <div className="Auth-form-content">
+                    {errorMessage && (
+                        <Alert className='center' variant="danger">
+                            {errorMessage}
+                        </Alert>
+                    )}
+
+                    <h3 className="Auth-form-title">Đăng Ký</h3>
+                    <div className="form-group mt-3">
+                        <label>Tài khoản</label>
+                        <input
+                            required
+                            value={user.username}
+                            onChange={e => change(e, "username")}
+                            type="text"
+                            className="form-control mt-1"
+                            placeholder="Nhập tài khoản"
+                        />
+                    </div>
+                    <div className="form-group mt-3">
+                        <label>Mật khẩu</label>
+                        <input
+                            required
+                            value={user.password}
+                            onChange={e => change(e, "password")}
+                            type="password"
+                            className="form-control mt-1"
+                            placeholder="Nhập mật khẩu"
+                        />
+                    </div>
+                    <div className="form-group mt-3">
+                        <label>Xác nhận Mật khẩu</label>
+                        <input
+                            required
+                            value={user.confirmPass}
+                            onChange={e => change(e, "confirmPass")}
+                            type="password"
+                            className="form-control mt-1"
+                            placeholder="Xác nhận mật khẩu"
+                        />
+                    </div>
+                    <div className="form-group mt-3">
+                        <label>Email</label>
+                        <input
+                            required
+                            value={user.email}
+                            onChange={e => change(e, "email")}
+                            type="email"
+                            className="form-control mt-1"
+                            placeholder="Email"
+                        />
+                    </div>
+                    <div className="form-group mt-3">
+                        <label>Avatar</label>
+                        <input
+                            required
+                            type="file"
+                            onChange={handleAvatarChange}
+                            accept="image/*"
+                            className="form-control mt-1"
+                            placeholder="Avatar"
+                        />
+                        <label htmlFor="file" >
+                            <span>Add an avatar</span>
+                        </label>
+                    </div>
+                    <button disabled={loading} type="submit">Đăng ký</button>
+                    {loading && 'Uploading and compressing the image please wait...'}
+                    {errorMessage && <span>Something went wrong</span>}
+                </div>
+            </div>
+        </Form>
+    </>
+}
+
+export default Register;
+
+
     //     const [user, setUser] = useState({
     //         "username": "",
     //         "password": "",
@@ -102,177 +272,3 @@ const Register = () => {
     //             process();
     //         }
     //     }
-
-    const [user, setUser] = useState({
-        username: '',
-        password: '',
-        confirmPass: '',
-        email: '',
-        avatar: null,
-    });
-
-    const [alertMessage, setAlertMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-    const change = (e, field) => {
-        setUser((prevUser) => ({
-            ...prevUser,
-            [field]: e.target.value,
-        }));
-    };
-    const handleAvatarChange = (e) => {
-        setUser((prevUser) => ({
-            ...prevUser,
-            avatar: e.target.files[0],
-        }));
-    };
-
-    const handleRegister = async (e) => {
-        try {
-            e.preventDefault();
-            setLoading(true);
-
-            if (user.password !== user.confirmPass) {
-                setErrorMessage('Mật khẩu xác nhận không khớp');
-                setLoading(false);
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('username', user.username);
-            formData.append('password', user.password);
-            formData.append('email', user.email);
-            formData.append('avatar', user.avatar);
-
-
-            const response = await Apis.post(endpoints['register'], formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data', // Important: set content type for file upload
-                },
-            });
-
-            if (response.status === 201) {
-                const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
-
-                const date = new Date().getTime();
-                const storageRef = ref(storage, `${user.username + date}`);
-
-                await uploadBytesResumable(storageRef, user.avatar).then(() => {
-                    getDownloadURL(storageRef).then(async (downloadURL) => {
-                        try {
-                            await updateProfile(res.user, {
-                                displayName: user.username,
-                                photoURL: downloadURL,
-                            });
-
-                            await setDoc(doc(db, "users", res.user.uid), {
-                                uid: res.user.uid,
-                                username: user.username,
-                                email: user.email,
-                                photoURL: downloadURL,
-                            });
-
-                            await setDoc(doc(db, "userChats", res.user.uid), {});
-                            navigate("/");
-                        } catch (err) {
-                            console.log(err);
-                            setErrorMessage('Đã xảy ra lỗi khi cập nhật hồ sơ');
-                        }
-                    });
-                });
-            } else {
-                setErrorMessage(response.data);
-            }
-        } catch (err) {
-            setErrorMessage(err.response?.data || err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
-    return <>
-        <Form onSubmit={handleRegister} className="Auth-form-container">
-            <div className="Auth-form">
-                <div className="Auth-form-content">
-                    {errorMessage && (
-                        <Alert className='center' variant="danger">
-                            {errorMessage}
-                        </Alert>
-                    )}
-                    {alertMessage && (
-                        <Alert className='center' variant="success">
-                            {alertMessage}
-                        </Alert>
-                    )}
-
-                    <h3 className="Auth-form-title">Đăng Ký</h3>
-                    <div className="form-group mt-3">
-                        <label>Tài khoản</label>
-                        <input
-                            required
-                            value={user.username}
-                            onChange={e => change(e, "username")}
-                            type="text"
-                            className="form-control mt-1"
-                            placeholder="Nhập tài khoản"
-                        />
-                    </div>
-                    <div className="form-group mt-3">
-                        <label>Mật khẩu</label>
-                        <input
-                            required
-                            value={user.password}
-                            onChange={e => change(e, "password")}
-                            type="password"
-                            className="form-control mt-1"
-                            placeholder="Nhập mật khẩu"
-                        />
-                    </div>
-                    <div className="form-group mt-3">
-                        <label>Xác nhận Mật khẩu</label>
-                        <input
-                            required
-                            value={user.confirmPass}
-                            onChange={e => change(e, "confirmPass")}
-                            type="password"
-                            className="form-control mt-1"
-                            placeholder="Xác nhận mật khẩu"
-                        />
-                    </div>
-                    <div className="form-group mt-3">
-                        <label>Email</label>
-                        <input
-                            required
-                            value={user.email}
-                            onChange={e => change(e, "email")}
-                            type="email"
-                            className="form-control mt-1"
-                            placeholder="Email"
-                        />
-                    </div>
-                    <div className="form-group mt-3">
-                        <label>Avatar</label>
-                        <input
-                            required
-                            type="file"
-                            onChange={handleAvatarChange}
-                            accept="image/*"
-                            className="form-control mt-1"
-                            placeholder="Avatar"
-                        />
-                        <label htmlFor="file" >
-                            <span>Add an avatar</span>
-                        </label>
-                    </div>
-                    <button disabled={loading} type="submit">Đăng ký</button>
-                    {loading && 'Uploading and compressing the image please wait...'}
-                    {errorMessage && <span>Something went wrong</span>}
-                </div>
-            </div>
-        </Form>
-    </>
-}
-
-export default Register;

@@ -34,7 +34,16 @@ public class ApiSemesterController {
     @CrossOrigin
     public ResponseEntity<List<Semester>> list( @RequestParam String lecturerId) {
         List<Semester> list = this.semesterService.getSemesterByLecturerId(lecturerId);
-        if (list == null) {
+        if (list.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    @GetMapping("/semesters/student/")
+    @CrossOrigin
+    public ResponseEntity<List<Semester>> getListSemesterByStudentId( @RequestParam String studentId) {
+        List<Semester> list = this.semesterService.getSemesterByStudentId(studentId);
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);

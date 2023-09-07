@@ -1,7 +1,14 @@
 package com.nmt.repository.impl;
 
+import com.nmt.model.Classes;
+import com.nmt.model.Faculty;
+import com.nmt.model.Major;
 import com.nmt.model.Student;
 import com.nmt.model.User;
+import com.nmt.repository.ClassesRepository;
+import com.nmt.repository.FacultyRepository;
+import com.nmt.repository.MajorRepository;
+import com.nmt.repository.ScoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +25,9 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.nmt.repository.StudentRepository;
-import javax.persistence.EntityManager;
+import com.nmt.repository.UserRepository;
+import java.util.Date;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import org.hibernate.HibernateException;
 
 /**
@@ -36,8 +43,14 @@ public class StudentRepositoryImpl implements StudentRepository {
     private LocalSessionFactoryBean factory;
     @Autowired
     private Environment env;
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private UserRepository userRepo;
+    @Autowired
+    private ClassesRepository classesRepo;
+    @Autowired
+    private FacultyRepository falRepo;
+    @Autowired
+    private MajorRepository majorRepo;
 
     @Override
     public List<Student> getStudents(Map<String, String> params) {
@@ -139,23 +152,48 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public List<Student> getListStudentBySubjectAndLecturer(String lecturerId, String subjectId) {
+    public List<Student> getListStudent(String lecturerId, String subjectId, String semesterId) {
         Session s = this.factory.getObject().getCurrentSession();
         List<Student> students = new ArrayList<>();
+        List<Object[]> objects = new ArrayList<>();
 
         try {
-            String sql = "SELECT student.id, student.name, student.birthday, student.gender, student.phone, student.address, student.user_id, student.classes_id, student.faculty_id, student.major_id \n"
-                    + "From student join student_subject on student.id = student_subject.student_id\n"
-                    + "join subject on subject.id = student_subject.subject_id\n"
-                    + "join lecturer_subject on subject.id = lecturer_subject.subject_id\n"
-                    + "join lecturer on lecturer.id = lecturer_subject.lecturer_id "
-                    + "WHERE subject.id = :subjectId AND lecturer.id = :lecturerId";
+            String sql = "SELECT distinct student.* \n"
+                    + "FROM score\n"
+                    + "JOIN subject ON score.subject_id = subject.id\n"
+                    + "JOIN semester ON score.semester_id = semester.id\n"
+                    + "JOIN student ON score.student_id = student.id\n"
+                    + "JOIN lecturer_subject ON lecturer_subject.subject_id = subject.id\n"
+                    + "JOIN lecturer ON lecturer_subject.lecturer_id = lecturer.id\n"
+                    + "LEFT JOIN score_value ON score_value.score_id = score.id\n"
+                    + "LEFT JOIN score_column ON score_value.score_column_id = score_column.id\n"
+                    + "WHERE lecturer.id = :lecturerId AND subject.id = :subjectId AND semester.id = :semesterId";
 
             Query query = s.createNativeQuery(sql);
-            query.setParameter("subjectId", subjectId);
             query.setParameter("lecturerId", lecturerId);
+            query.setParameter("subjectId", subjectId);
+            query.setParameter("semesterId", semesterId);
 
-            students = query.getResultList();
+            objects = query.getResultList();
+            for (int i = 0; i < objects.size(); i++) {
+                Student student = new Student();
+                User u = this.userRepo.getUserById(Integer.parseInt(objects.get(i)[6].toString()));
+                Classes c = this.classesRepo.getClassById(objects.get(i)[7].toString());
+                Faculty f = this.falRepo.getFacultyById(objects.get(i)[8].toString());
+                Major m = this.majorRepo.getMajorById(objects.get(i)[9].toString());
+                student.setId(objects.get(i)[0].toString());
+                student.setName(objects.get(i)[1].toString());
+                student.setBirthday((Date) objects.get(i)[2]);
+                student.setGender(Short.parseShort(objects.get(i)[3].toString()));
+                student.setPhone(objects.get(i)[4].toString());
+                student.setAddress(objects.get(i)[5].toString());
+                student.setUserId(u);
+                student.setClassesId(c);
+                student.setFacultyId(f);
+                student.setMajorId(m);
+
+                students.add(student);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

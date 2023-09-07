@@ -135,4 +135,25 @@ public class SemesterRepositoryImpl implements SemesterRepository {
         return semesters;
     }
 
+    @Override
+    public List<Semester> getSemesterByStudentId(String studentId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        List<Semester> semesters = new ArrayList<>();
+        try {
+            String sql = "SELECT DISTINCT semester.id, semester.name, semester.school_year\n"
+                    + "FROM semester\n"
+                    + "join score on score.semester_id = semester.id\n"
+                    + "join subject on score.subject_id = subject.id\n"
+                    + "join student_subject on student_subject.subject_id = subject.id\n"
+                    + "join student on student_subject.student_id = student.id\n"
+                    + "where student.id = :studentId";
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("studentId", studentId);
+            semesters = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return semesters;
+    }
+
 }

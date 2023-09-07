@@ -5,6 +5,7 @@
 package com.nmt.service;
 
 import com.nmt.model.Student;
+import dto.StuScoreDto;
 import dto.StudentDto;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,6 @@ public interface StudentService {
     Student getStudentById(String id);
     boolean deleteStudent(String id);
     StudentDto getStudentByUsername(String username);
-    List<Student> getListStudentBySubjectAndLecturer(String lectureId, String subjectId);
+    List<StuScoreDto> getListStudent(String lectureId, String subjectId, String semesterId);
 
 }

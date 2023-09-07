@@ -5,6 +5,9 @@
 package com.nmt.service;
 
 import com.nmt.model.Score;
+import dto.ScoreDto;
+import dto.ScoreListDto;
+import dto.Score_ScoreValueDto;
 import dto.StudentScoreDTO;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +21,10 @@ public interface ScoreService {
     int countScores();
     boolean addOrUpdateScore(Score u);
     Score getScoreById(int id);
-    List<StudentScoreDTO> getScoreByStudentId(String studentId);
+    List<ScoreDto> getScoreByStudentId(String studentId, String subjectId, String semesterId);
+    List<ScoreListDto> getListScoreStudent(String studentId, String semesterId);
     List<StudentScoreDTO> getStudentScores(String lecturerId, String semesterId, String subjectId);
     List<StudentScoreDTO> getListScoresExport(String subjectId, String semesterId);
     boolean deleteScore(int id);
+    Score_ScoreValueDto addScore(Map<String, String> params);
 }

@@ -44,5 +44,10 @@ public class ScoreColumnSeviceImpl implements ScoreColumnSevice{
     public int countScoreColumns() {
         return this.scoreColumnRepo.countScoreColumns();
     }
+
+    @Override
+    public boolean addScoreColumn(ScoreColumn u) {
+        return this.scoreColumnRepo.addScoreColumn(u);
+    }
     
 }

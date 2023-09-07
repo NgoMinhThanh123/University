@@ -3,15 +3,13 @@ import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
 
 function BaseLayout({ children }) {
-    return (
-      <div className="">
+    return (<>
         <Header />
         <Container>
           <div className="">{children}</div>
         </Container>
         <Footer />
-      </div>
-    );
+    </>)
 }
 
   export default BaseLayout;

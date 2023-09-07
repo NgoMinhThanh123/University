@@ -5,6 +5,7 @@
 package com.nmt.repository;
 
 import com.nmt.model.Student;
+import dto.StuScoreDto;
 import java.util.List;
 import java.util.Map;
 
@@ -20,5 +21,5 @@ public interface StudentRepository {
     Student getStudentById(String id);
     Student getStudentByUsername(String username);
     boolean deleteStudent(String id);
-    List<Student> getListStudentBySubjectAndLecturer(String lecturerId, String subjectId);
+    List<Student> getListStudent(String lecturerId, String subjectId, String semesterID);
 }

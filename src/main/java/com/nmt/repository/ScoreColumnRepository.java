@@ -16,6 +16,7 @@ public interface ScoreColumnRepository {
     List<ScoreColumn> getScoreColumns(Map<String, String> params);
     int countScoreColumns();
     boolean addOrUpdateScoreColumn(ScoreColumn u);
+    boolean addScoreColumn(ScoreColumn u);
     ScoreColumn getScoreColumnById(int id);
     boolean deleteScoreColumn(int id);
 }

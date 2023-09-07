@@ -45,5 +45,11 @@ public class ScoreValueServiceImpl implements ScoreValueService{
     public int countScoreValues() {
         return this.scoreValueRepo.countScoreValues();
     }
+
+    @Override
+    public ScoreValue addScoreValue(ScoreValue u) {
+        return this.scoreValueRepo.addScoreValue(u);
+    }
+
     
 }

@@ -1,6 +1,8 @@
 package com.nmt.repository.impl;
 
+import com.nmt.model.Faculty;
 import com.nmt.model.Subject;
+import com.nmt.repository.FacultyRepository;
 import com.nmt.repository.SubjectRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ public class SubjectRepositoryImpl implements SubjectRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
+    @Autowired
+    private FacultyRepository facRepo;
     @Autowired
     private Environment env;
 
@@ -145,7 +149,40 @@ public class SubjectRepositoryImpl implements SubjectRepository {
             query.setParameter("studentId", studentId);
 
             subjects = query.getResultList();
-            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return subjects;
+    }
+
+    @Override
+    public List<Subject> getSubjectByStudentAndSemesterId(String studentId, String semesterId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        
+        List<Subject> subjects = new ArrayList<>();
+        try {
+            String sql = "SELECT distinct subject.id, subject.name, subject.credit, subject.faculty_id\n"
+                    + "FROM subject join student_subject on subject.id = student_subject.subject_id\n"
+                    + "join student on student.id = student_subject.student_id\n"
+                    + "join score on score.subject_id = subject.id\n"
+                    + "join semester on score.semester_id = semester.id\n"
+                    + "where student.id = :studentId and semester.id = :semesterId";
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("studentId", studentId);
+            query.setParameter("semesterId", semesterId);
+
+           List<Object[]> objects = query.getResultList();
+           for(int i = 0; i < objects.size(); i++){
+               Subject subject = new Subject();
+               Faculty faculty = this.facRepo.getFacultyById(objects.get(i)[3].toString());
+               subject.setId(objects.get(i)[0].toString());
+               subject.setName(objects.get(i)[1].toString());
+               subject.setCredit(Integer.parseInt(objects.get(i)[2].toString()));
+               subject.setFacultyId(faculty);
+               subjects.add(subject);
+           }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

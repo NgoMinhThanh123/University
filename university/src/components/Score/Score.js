@@ -1,13 +1,15 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { MyUserContext } from "../../App";
 import { authApi, endpoints } from "../../configs/Apis";
 import { useEffect } from "react";
+import "./Score.css"
 
 const Score = () => {
     const [user] = useContext(MyUserContext);
-    const [scoreList, setScoreList] = useState([]);
+    const [subject, setSubject] = useState([]);
+    const [semesters, setSemesters] = useState([]); // Mảng semesters
+    const [scoreLists, setScoreLists] = useState([]); // Mảng scoreLists chứa thông tin điểm số của từng học kỳ
     const [err, setErr] = useState("");
-    const [uniqueSemesters, setUniqueSemesters] = useState({});
 
     useEffect(() => {
         async function fetchData() {
@@ -15,25 +17,28 @@ const Score = () => {
                 const studentUsername = user.username;
                 const response = await authApi().get(endpoints['get-student-by-username'].replace("{username}", studentUsername));
                 const studentId = response.data.id;
-                const scoreEndpoint = endpoints["score-student"] + `?studentId=${studentId}`;
-                const scoreResponse = await authApi().get(scoreEndpoint);
+                const semesterResponse = await authApi().get(endpoints["semester-student"] + `?studentId=${studentId}`);
+                console.log(semesterResponse.data);
 
-                if (scoreResponse.data) {
-                    console.log("scores:", scoreResponse.data);
-                    // Lọc và duyệt danh sách điểm số
-                    const filteredScores = scoreResponse.data.filter((score) => {
-                        const semesterKey = `${score.semesterName} - ${score.schoolYear}`;
-                        if (!uniqueSemesters[semesterKey]) {
-                            setUniqueSemesters((prevUniqueSemesters) => ({
-                                ...prevUniqueSemesters,
-                                [semesterKey]: true,
-                            }));
-                            return true; // Giữ lại điểm số cho học kì và năm học chưa xuất hiện
-                        }
-                        return false; // Bỏ qua điểm số cho học kì và năm học đã xuất hiện
-                    });
-                    setScoreList(filteredScores);
+                // Lưu thông tin về semesters vào state
+                setSemesters(semesterResponse.data);
+
+                const scoreLists = []; // Mảng để lưu thông tin điểm số của từng học kỳ
+
+                for (const semester of semesterResponse.data) {
+                    const semesterId = semester[0]; // Lấy id của học kỳ
+
+                    const scoreEndpoint = endpoints["score-list"] + `?studentId=${studentId}&semesterId=${semesterId}`;
+                    const scoreResponse = await authApi().get(scoreEndpoint);
+
+                    console.log(scoreResponse.data);
+
+                    // Lưu thông tin về điểm số của từng học kỳ vào mảng scoreLists
+                    scoreLists.push(scoreResponse.data);
                 }
+
+                // Lưu mảng scoreLists vào state
+                setScoreLists(scoreLists);
             } catch (err) {
                 setErr(true);
             }
@@ -42,44 +47,46 @@ const Score = () => {
         fetchData();
     }, [user]);
 
+    console.log(scoreLists);
+
     return (
         <div>
-            <h2>Thông tin điểm số</h2>
-            {Object.keys(uniqueSemesters).map((semester, index) => (
-                <div key={index}>
-                    <h3>{semester}</h3>
-                    <table>
+            <h2 className="score">Thông tin điểm số</h2>
+            {semesters.map((semester, semesterIndex) => (
+                <div key={semesterIndex}>
+                    <div className="semester">{`${semester[1]}-${semester[2]}`}</div>
+                    <table className="score-table">
                         <thead>
                             <tr>
-                                <th>Stt</th>
+                                <th>STT</th>
                                 <th>Tên môn học</th>
                                 <th>Quá trình</th>
                                 <th>Giữa kì</th>
                                 <th>Cuối kì</th>
-                                <th>Kết quả</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {scoreList
-                                .filter((score) => `${score.semesterName} - ${score.schoolYear}` === semester)
-                                .map((score, scoreIndex) => (
-                                    <tr key={scoreIndex}>
-                                        <td>{scoreIndex + 1}</td>
-                                        <td>{score.subjectName}</td>
-                                        <td>{score.scoreValue || "-"}</td>
-                                        <td>{score.scoreValue || "-"}</td>
-                                        <td>{score.scoreValue || "-"}</td>
-                                        <td>{score.ketQua || "-"}</td>
-                                    </tr>
-                                ))}
+                            {scoreLists[semesterIndex]?.map((score, scoreIndex) => (
+                                <tr key={scoreIndex}>
+                                    <td>{scoreIndex + 1}</td>
+                                    <td>{score.subjectName}</td>
+                                    {score.scoreDto.length > 0 ? (                                  
+                                    <td>{score.scoreDto[0].scoreColumnName === 'Quá trình' ? score.scoreDto[0].scoreValue || "-" : "-"}</td>
+                                    ) : null}
+                                    {score.scoreDto.length > 0 ? (
+                                    <td>{score.scoreDto[1].scoreColumnName === 'Giữa kì' ? score.scoreDto[1].scoreValue || "-" : "-"}</td>
+                                    ) : null}
+                                    {score.scoreDto.length > 0 ? (
+                                    <td>{score.scoreDto[2].scoreColumnName === 'Cuối kì' ? score.scoreDto[2].scoreValue || "-" : "-"}</td>
+                                    ) : null}
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             ))}
         </div>
     );
-
-
 }
 
 export default Score;

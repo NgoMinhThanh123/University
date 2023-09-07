@@ -16,6 +16,7 @@ public interface ScoreValueService {
     List<ScoreValue> getScoreValues(Map<String, String> params);
     int countScoreValues();
     boolean addOrUpdateScoreValue(ScoreValue u);
+    ScoreValue addScoreValue(ScoreValue u);
     ScoreValue getScoreValueById(int id);
     boolean deleteScoreValue(int id);
 }

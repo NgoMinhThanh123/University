@@ -62,4 +62,9 @@ public class SubjectServiceImpl implements SubjectService {
         return this.subjectRepo.getSubjectByStudentId(studentId);
     }
 
+    @Override
+    public List<Subject> getSubjectByStudentAndSemesterId(String studentId, String semesterId) {
+        return this.subjectRepo.getSubjectByStudentAndSemesterId(studentId, semesterId);
+    }
+
 }

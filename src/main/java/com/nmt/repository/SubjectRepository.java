@@ -20,5 +20,6 @@ public interface SubjectRepository {
     Subject getSubjectById(String id);
     List<Subject> getSubjectByLecturerId(String lecturerId);
     List<Subject> getSubjectByStudentId(String studentId);
+    List<Subject> getSubjectByStudentAndSemesterId(String studentId, String semesterId);
     boolean deleteSubject(String id);
 }

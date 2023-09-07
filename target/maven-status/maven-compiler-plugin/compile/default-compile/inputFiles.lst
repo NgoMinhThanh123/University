@@ -17,6 +17,7 @@ E:\University\src\main\java\com\nmt\formatters\UserFormatter.java
 E:\University\src\main\java\com\nmt\controllers\ApiSemesterController.java
 E:\University\src\main\java\com\nmt\model\ScoreColumn.java
 E:\University\src\main\java\com\nmt\repository\impl\ScoreColumnRepositoryImpl.java
+E:\University\src\main\java\dto\ScoreDto.java
 E:\University\src\main\java\com\nmt\components\JwtService.java
 E:\University\src\main\java\com\nmt\controllers\ApiUserController.java
 E:\University\src\main\java\com\nmt\formatters\SemeterFormatter.java
@@ -34,11 +35,13 @@ E:\University\src\main\java\com\nmt\repository\SemesterRepository.java
 E:\University\src\main\java\com\nmt\service\SubjectService.java
 E:\University\src\main\java\com\nmt\formatters\ScoreFormatter.java
 E:\University\src\main\java\com\nmt\formatters\SubjectFormatter.java
+E:\University\src\main\java\dto\ScoreListDto.java
 E:\University\src\main\java\com\nmt\formatters\MajorFormatter.java
 E:\University\src\main\java\com\nmt\model\User.java
 E:\University\src\main\java\com\nmt\service\SemesterService.java
 E:\University\src\main\java\com\nmt\controllers\ApiMajorController.java
 E:\University\src\main\java\com\nmt\repository\impl\PostRepositoryImpl.java
+E:\University\src\main\java\dto\StuScoreDto.java
 E:\University\src\main\java\com\nmt\controllers\ApiScoreColumnController.java
 E:\University\src\main\java\com\nmt\configs\DispatcherServletInit.java
 E:\University\src\main\java\com\nmt\controllers\ScoreColumnController.java
@@ -46,6 +49,7 @@ E:\University\src\main\java\com\nmt\service\impl\LectureServiceImpl.java
 E:\University\src\main\java\com\nmt\service\impl\ScoreServiceImpl.java
 E:\University\src\main\java\com\nmt\controllers\ApiPostController.java
 E:\University\src\main\java\com\nmt\model\Classes.java
+E:\University\src\main\java\dto\Score_ScoreValueDto.java
 E:\University\src\main\java\com\nmt\service\ClassesService.java
 E:\University\src\main\java\com\nmt\configs\JwtSecurityConfig.java
 E:\University\src\main\java\com\nmt\fillers\JwtAuthenticationTokenFilter.java

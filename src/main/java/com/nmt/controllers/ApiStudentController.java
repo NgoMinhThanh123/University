@@ -7,6 +7,7 @@ package com.nmt.controllers;
 import com.nmt.model.Student;
 import com.nmt.service.StudentService;
 import com.nmt.service.UserService;
+import dto.StuScoreDto;
 import dto.StudentDto;
 import java.util.List;
 import java.util.Map;
@@ -70,11 +71,12 @@ public class ApiStudentController {
     
     @GetMapping(path = "/get-list-student/", produces = MediaType.APPLICATION_JSON_VALUE)
     @CrossOrigin
-    public ResponseEntity<List<Student>> getStudentsBySubjectAndLecturer(
-            @RequestParam String subjectId,
-            @RequestParam String lecturerId) {
-        List<Student> list = studentService.getListStudentBySubjectAndLecturer(lecturerId, subjectId);
-        if (list == null) {
+    public ResponseEntity<List<StuScoreDto>> getListStudent(
+            @RequestParam String lecturerId,
+            @RequestParam String subjectId,      
+            @RequestParam String semesterId) {
+        List<StuScoreDto> list = studentService.getListStudent(lecturerId, subjectId, semesterId);
+        if (list.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);

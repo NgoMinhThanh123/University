@@ -56,4 +56,9 @@ public class SemesterServiceImpl implements SemesterService {
     public List<Semester> getSemesterByLecturerId(String lecturerId) {
         return this.semesRepo.getSemesterByLecturerId(lecturerId);
     }
+
+    @Override
+    public List<Semester> getSemesterByStudentId(String studentId) {
+        return this.semesRepo.getSemesterByStudentId(studentId);
+    }
 }

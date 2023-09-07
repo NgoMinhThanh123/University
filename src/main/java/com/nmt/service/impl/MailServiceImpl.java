@@ -22,8 +22,8 @@ public class MailServiceImpl implements MailService{
 //    private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 
 
-    @Override
-    public void sendMailToStudent(MailRequest mailRequest) {
+//    @Override
+//    public void sendMailToStudent(MailRequest mailRequest) {
 //        logger.debug("RUN JOB: sendMailToEachPersonGroup");
 //        SimpleMailMessage message = new SimpleMailMessage();
 //        message.setTo(mailRequest.getRecipients());
@@ -33,6 +33,6 @@ public class MailServiceImpl implements MailService{
 //
 //        mailSender.send(message);
 //        logger.debug("END JOB: sendMailToEachPersonGroup");
-    }
+//    }
     
 }

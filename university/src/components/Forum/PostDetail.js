@@ -42,7 +42,6 @@ const PostDetail = () => {
 
     }, []);
 
-    console.log(post.userId.id);
 
     const addComment = () => {
         const process = async () => {
@@ -52,6 +51,7 @@ const PostDetail = () => {
             });
 
             setComment([...comment, data]);
+            setContent("");
         }
 
         process();

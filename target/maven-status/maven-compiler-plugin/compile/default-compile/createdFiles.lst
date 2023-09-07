@@ -3,6 +3,7 @@ com\nmt\controllers\SemesterController.class
 com\nmt\model\Lecturer.class
 com\nmt\service\LecturerService.class
 com\nmt\repository\impl\UserRepositoryImpl.class
+utils\HTMLConverter.class
 com\nmt\controllers\ApiUserController.class
 com\nmt\configs\TilesConfig.class
 com\nmt\model\Post.class
@@ -39,6 +40,7 @@ com\nmt\model\SubjectSemester.class
 com\nmt\repository\impl\LecturerRepositoryImpl.class
 com\nmt\controllers\ApiClassController.class
 com\nmt\service\impl\LectureServiceImpl.class
+utils\Constants.class
 com\nmt\model\StudentSubject.class
 dto\StudentScoreDTO.class
 com\nmt\controllers\ApiMajorController.class
@@ -57,6 +59,7 @@ com\nmt\formatters\FacultyFormatter.class
 dto\RegisterDto.class
 com\nmt\repository\FacultyRepository.class
 com\nmt\service\SubjectService.class
+com\nmt\request\RequestMailToStudent.class
 com\nmt\service\PostService.class
 com\nmt\repository\impl\SemesterRepositoryImpl.class
 dto\UserDto.class
@@ -100,6 +103,7 @@ com\nmt\formatters\StudentFormatter.class
 com\nmt\service\impl\SubjectServiceImpl.class
 com\nmt\repository\impl\ScoreColumnRepositoryImpl.class
 com\nmt\model\Faculty.class
+com\nmt\request\RequestMailToStudent$RequestMailToStudentBuilder.class
 com\nmt\model\ClassesSubject.class
 com\nmt\service\impl\ScoreServiceImpl.class
 com\nmt\controllers\ApiScoreColumnController.class

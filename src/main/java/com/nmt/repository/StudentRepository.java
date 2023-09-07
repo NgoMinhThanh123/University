@@ -22,4 +22,6 @@ public interface StudentRepository {
     Student getStudentByUsername(String username);
     boolean deleteStudent(String id);
     List<Student> getListStudent(String lecturerId, String subjectId, String semesterID);
+    List<String> getAllMailOfStudent(String lecturerId, String subjectId, String semesterId);
+
 }

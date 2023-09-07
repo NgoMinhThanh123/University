@@ -1,6 +1,15 @@
 .forum {
     text-align: center;
 }
+
+.forum-header{
+    display: flex;
+}
+
+.forum-btn{
+    margin-bottom: 10px;
+}
+
 .post-container{
     margin-top: 10px;
 }
@@ -23,6 +32,9 @@
     font-size: 14px;
 }
 
+.btn-search {
+    width: 150px;
+}
 .title {
     font-weight: bold;
     margin-bottom: 0;

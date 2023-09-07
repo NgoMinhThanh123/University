@@ -40,6 +40,7 @@ E:\University\src\main\java\com\nmt\formatters\MajorFormatter.java
 E:\University\src\main\java\com\nmt\model\User.java
 E:\University\src\main\java\com\nmt\service\SemesterService.java
 E:\University\src\main\java\com\nmt\controllers\ApiMajorController.java
+E:\University\src\main\java\utils\HTMLConverter.java
 E:\University\src\main\java\com\nmt\repository\impl\PostRepositoryImpl.java
 E:\University\src\main\java\dto\StuScoreDto.java
 E:\University\src\main\java\com\nmt\controllers\ApiScoreColumnController.java
@@ -67,9 +68,11 @@ E:\University\src\main\java\com\nmt\repository\PostRepository.java
 E:\University\src\main\java\com\nmt\service\impl\FacultyServiceImpl.java
 E:\University\src\main\java\dto\LecturerDto.java
 E:\University\src\main\java\com\nmt\controllers\SubjectController.java
+E:\University\src\main\java\com\nmt\request\RequestMailToStudent.java
 E:\University\src\main\java\com\nmt\configs\WebAppContextConfig.java
 E:\University\src\main\java\com\nmt\repository\MajorRepository.java
 E:\University\src\main\java\com\nmt\service\impl\SubjectServiceImpl.java
+E:\University\src\main\java\utils\Constants.java
 E:\University\src\main\java\exception\UserException.java
 E:\University\src\main\java\com\nmt\fillers\RestAuthenticationEntryPoint.java
 E:\University\src\main\java\com\nmt\service\impl\UserServiceImpl.java

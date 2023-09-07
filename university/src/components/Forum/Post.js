@@ -5,7 +5,7 @@ import MySpinner from "../../layout/MySpinner";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import './Post.css'
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, Form, Pagination, Row } from "react-bootstrap";
 import formatDate from "../FormatDare/FormatDate";
 import moment from 'moment';
 
@@ -15,15 +15,34 @@ const Post = () => {
     const [showInput, setShowInput] = useState(false);
     const [title, setTitle] = useState();
     const [content, setContent] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 6;
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const [searchKeyword, setSearchKeyword] = useState("");
+
 
     useEffect(() => {
         const loadPost = async () => {
-            let { data } = await Apis.get(endpoints['posts']);
+            let { data } = await Apis.get(endpoints['posts'], {
+                params: { kw: searchKeyword },
+            });
             setPost(data);
         }
-
+    
         loadPost();
-    }, []);
+    }, [searchKeyword]);
+
+    const handleSearch = async () => {
+        try {
+            const { data } = await Apis.get(endpoints['posts'], {
+                params: { kw: searchKeyword },
+            });
+            setPost(data);
+        } catch (error) {
+            console.error("Error searching posts:", error);
+        }
+    };
 
     console.log(post);
 
@@ -41,21 +60,45 @@ const Post = () => {
             setPost([...post, data]);
 
             setTitle("");
-            setContent(""); 
+            setContent("");
             setShowInput(false);
         }
 
         process();
     };
+    const currentPosts = post.slice(indexOfFirstPost, indexOfLastPost);
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(post.length / postsPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
     if (post === null)
         return <MySpinner />
 
-    return (
+    return <>
         <div>
             <h3 className="forum">Diễn đàn thảo luận môn học</h3>
+            <Container className="mt-4 mb-4">
+                <Row>
+                    <Col sm={4}>
+                        <Form className="d-flex">
+                            <Form.Control
+                                type="search"
+                                placeholder="Search"
+                                className="me-2"
+                                aria-label="Search"
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                            />
+                            <Button className="btn-search" onClick={handleSearch}>
+                                Tìm kiếm
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+            </Container>
             {!showInput && (
-                <Button onClick={handleToggleInput}>Đăng bài</Button>
+                <Button className="forum-btn" onClick={handleToggleInput}>Đăng bài</Button>
             )}
             {showInput && (
                 <div className="post-container">
@@ -83,7 +126,7 @@ const Post = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {post.map(p => (
+                        {currentPosts.map(p => (
                             <tr key={p.id}>
                                 <td>
                                     <Link to={`/posts/${p.id}`} className="post-link">
@@ -98,7 +141,14 @@ const Post = () => {
                 </table>
             )}
         </div>
-    );
+        <Pagination>
+            {pageNumbers.map(number => (
+                <Pagination.Item key={number} active={currentPage === number} onClick={() => setCurrentPage(number)}>
+                    {number}
+                </Pagination.Item>
+            ))}
+        </Pagination>
+    </>
 
 }
 

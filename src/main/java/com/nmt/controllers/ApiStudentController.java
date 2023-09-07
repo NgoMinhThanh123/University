@@ -5,37 +5,49 @@
 package com.nmt.controllers;
 
 import com.nmt.model.Student;
+import com.nmt.request.MailRequest;
+import com.nmt.request.RequestMailToStudent;
+import com.nmt.service.MailService;
 import com.nmt.service.StudentService;
 import com.nmt.service.UserService;
 import dto.StuScoreDto;
 import dto.StudentDto;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import utils.HTMLConverter;
 
-/**
- *
- * @author acer
- */
+
+import static utils.Constants.YYYY_MM_DD;
+
 @RestController
 @RequestMapping("/api")
 public class ApiStudentController {
 
     @Autowired
     private StudentService studentService;
-     @Autowired
+    @Autowired
     private UserService userService;
+//    @Autowired
+//    private MailService mailService;
+//    @Autowired
+//    private JavaMailSender mailSender;
 
     @DeleteMapping("/update_student/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -81,5 +93,27 @@ public class ApiStudentController {
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+    
+//     @PostMapping("/students/mails/")
+//    public ResponseEntity<?> sendMailToStudent(@RequestBody RequestMailToStudent requestMail, 
+//            @RequestParam String lecturerId,
+//            @RequestParam String subjectId,      
+//            @RequestParam String semesterId) {
+//        String subject = requestMail.getSubject();
+//        String body = HTMLConverter.convertToHTML(requestMail.getBody());
+//        String from = requestMail.getFrom();
+//        List<String> listMail = studentService.getAllMailOfStudent(lecturerId, subjectId, semesterId);
+//        listMail.stream().forEach(m -> {
+//            MailRequest mailRequest = MailRequest.builder()
+//                    .date(LocalDate.now().format(DateTimeFormatter.ofPattern(YYYY_MM_DD)))
+//                    .body(body)
+//                    .subject(subject)
+//                    .from(from)
+//                    .recipients(m)
+//                    .build();
+//            mailService.sendMailToStudent(mailRequest);
+//        });
+//        return ResponseEntity.ok("Send mail to group successfully!");
+//    }
     
 }

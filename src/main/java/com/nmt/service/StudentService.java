@@ -23,5 +23,6 @@ public interface StudentService {
     boolean deleteStudent(String id);
     StudentDto getStudentByUsername(String username);
     List<StuScoreDto> getListStudent(String lectureId, String subjectId, String semesterId);
+    List<String> getAllMailOfStudent(String lecturerId, String subjectId, String semesterId);
 
 }

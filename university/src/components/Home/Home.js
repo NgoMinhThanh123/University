@@ -11,7 +11,7 @@ const Home = () => {
             <h2 className="welcome">Chào mừng đến với Đại Học Mở TP.HCM</h2>
 
             <div>
-                <Carousel data-bs-theme="dark">
+                <Carousel interval={3000} data-bs-theme="dark">
                     <Carousel.Item>
                         <img
                             className="d-block w-100"

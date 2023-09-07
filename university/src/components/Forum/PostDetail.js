@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import Apis, { authApi, endpoints } from "../../configs/Apis";
 import { useEffect } from "react";
 import MySpinner from "../../layout/MySpinner";
@@ -29,10 +29,11 @@ const PostDetail = () => {
 
             loadUser();
         }
+        console.log(postId);
+        console.log(endpoints['comments'].replace("{id}", postId));
 
         const LoadComment = async () => {
             const data = await authApi().get(endpoints['comments'].replace("{id}", postId));
-            console.log(data.data);
 
             setComment(data.data);
         }
@@ -66,26 +67,34 @@ const PostDetail = () => {
         <div>
             <div className="post-container">
                 <p className="postDetail">{post.title}</p>
-                <p className="userDetail">Đăng bởi: {usernameHost} - Thời gian: {formatDate(post.postTime)}</p>           
-                <p>{post.content}</p>           
+                <p className="userDetail">Đăng bởi: {usernameHost} - Thời gian: {formatDate(post.postTime)}</p>
+                <p>{post.content}</p>
             </div>
-            <hr />  
-            <h3 className="comment-title">Bình luận</h3>
+            <hr />
 
-            <Form.Control as="textarea" aria-label="With textarea" value={content} onChange={e => setContent(e.target.value)} placeholder="Nội dung bình luận" />
-            <Button onClick={addComment} className="mt-2" variant="info">Bình luận</Button>      
-        <hr />
+           
+                    <hr />
+                    <h3 className="comment-title">Bình luận</h3>
 
-        {comment && comment.map(p => {
-            return <div key={p.id} className="post-container">
-                <div className="post-row">
-                    <p className="postDetail">{p.userId.username}- {formatDate(p.dateCreated)}</p>
-                    <p>{p.content}</p>
-                </div>
-            </div>
-        })}
-    </div >
-        </>
+                    <Form.Control as="textarea" aria-label="With textarea" value={content} onChange={e => setContent(e.target.value)} placeholder="Nội dung bình luận" />
+                    <Button onClick={addComment} className="mt-2" variant="info">Bình luận</Button>
+                    <hr />
+                    {comment == null && comment.length <= 0 && (
+                <>
+                <h1>Không có bình luận nào</h1>
+                    </>
+            )}
+                    {comment.map(p => (
+                        <div key={p.id} className="post-container">
+                            <div className="post-row">
+                                <p className="postDetail">{p.userId.username}- {formatDate(p.dateCreated)}</p>
+                                <p>{p.content}</p>
+                            </div>
+                        </div>
+                    ))}
+            
+        </div >
+    </>
 };
 
 export default PostDetail;  

@@ -2,13 +2,18 @@ package com.nmt.repository.impl;
 
 import com.nmt.model.Classes;
 import com.nmt.model.Faculty;
+import com.nmt.model.Lecturer;
 import com.nmt.model.Major;
+import com.nmt.model.Semester;
 import com.nmt.model.Student;
+import com.nmt.model.Subject;
 import com.nmt.model.User;
 import com.nmt.repository.ClassesRepository;
 import com.nmt.repository.FacultyRepository;
+import com.nmt.repository.LecturerRepository;
 import com.nmt.repository.MajorRepository;
 import com.nmt.repository.ScoreRepository;
+import com.nmt.repository.SemesterRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +30,11 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.nmt.repository.StudentRepository;
+import com.nmt.repository.SubjectRepository;
 import com.nmt.repository.UserRepository;
 import java.util.Date;
 import javax.persistence.NoResultException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.hibernate.HibernateException;
 
 /**
@@ -51,6 +58,12 @@ public class StudentRepositoryImpl implements StudentRepository {
     private FacultyRepository falRepo;
     @Autowired
     private MajorRepository majorRepo;
+    @Autowired
+    private LecturerRepository lecturerRepo;
+    @Autowired
+    private SubjectRepository subjectRepo;
+    @Autowired
+    private SemesterRepository semesterRepo;
 
     @Override
     public List<Student> getStudents(Map<String, String> params) {
@@ -207,6 +220,29 @@ public class StudentRepositoryImpl implements StudentRepository {
         Query q = s.createQuery("SELECT COUNT(*) FROM Student");
 
         return Integer.parseInt(q.getSingleResult().toString());
+    }
+
+    @Override
+    public List<String> getAllMailOfStudent(String lecturerId, String subjectId, String semesterId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Lecturer lecturer = this.lecturerRepo.getLecturerById(lecturerId);
+        Subject subject = this.subjectRepo.getSubjectById(subjectId);
+        Semester semester = this.semesterRepo.getSemesterById(semesterId);
+
+        Query q = s.createNativeQuery("SELECT user.email \n"
+                + "FROM student \n"
+                + "JOIN user ON student.user_id = user.id\n"
+                + "join student_subject on student_subject.student_id = student.id\n"
+                + "join subject on student_subject.subject_id = subject.id\n"
+                + "join subject_semester on subject_semester.subject_id = subject.id\n"
+                + "join semester on subject_semester.semester_id = semester.id\n"
+                + "join lecturer_subject on lecturer_subject.subject_id = subject.id\n"
+                + "join lecturer on lecturer_subject.lecturer_id = lecturer.id\n"
+                + "where lecturer.id = :lecturerId and subject.id = :subjectId and semester.id = :semesterId");
+            q.setParameter("lecturerId", lecturerId);
+            q.setParameter("subjectId", subjectId);
+            q.setParameter("semesterId", semesterId);
+        return q.getResultList();
     }
 
 }

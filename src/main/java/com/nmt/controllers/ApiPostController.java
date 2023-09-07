@@ -60,7 +60,7 @@ public class ApiPostController {
     public ResponseEntity<List<Comment>> getSubjectByLecturerId(@PathVariable(value = "postId") int postId) {
         List<Comment> list = commentService.getCommentByPostId(postId);
         if (list.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(list, HttpStatus.OK);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

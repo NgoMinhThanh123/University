@@ -6,7 +6,7 @@ import formatDate from "../FormatDare/FormatDate";
 
 const InputScore = () => {
     const [user] = useContext(MyUserContext);
-    const [subjectList, setSubjectList] = useState([]); 
+    const [subjectList, setSubjectList] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState("");
     const [selectedLecturer, setSelectedLecturer] = useState({});
     const [studentList, setStudentList] = useState([]);
@@ -16,11 +16,15 @@ const InputScore = () => {
     const [giuaki, setGiuaki] = useState({});
     const [cuoiki, setCuoiki] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
+    const [selectedScoreColumnName, setSelectedScoreColumnName] = useState("Quá trình"); // Default to "Quá trình" or any initial value
     const [studentColumnIds, setStudentColumnIds] = useState({
-        'Quá trình': 1, 
-        'Giữa kì': 2, 
-        'Cuối kì': 3,  
+        'Quá trình': 1,
+        'Giữa kì': 2,
+        'Cuối kì': 3,
     });
+    const handleScoreColumnChange = (columnName) => {
+        setSelectedScoreColumnName(columnName);
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -112,12 +116,15 @@ const InputScore = () => {
             const subjectId = selectedSubject;
             const semesterId = selectedSemester;
 
-            const scoreValue = parseFloat(
-                scoreColumnId === 1 ? quatrinh[studentId] || 0 :
-                scoreColumnId === 2 ? giuaki[studentId] || 0 :
-                cuoiki[studentId] || 0
-            );
+            let scoreValue = 0;
 
+            if (scoreColumnId === 1) {
+                scoreValue = parseFloat(quatrinh[studentId] || 0);
+            } else if (scoreColumnId === 2) {
+                scoreValue = parseFloat(giuaki[studentId] || 0);
+            } else if (scoreColumnId === 3) {
+                scoreValue = parseFloat(cuoiki[studentId] || 0);
+            }
             const formData = new FormData();
             formData.append("subjectId", subjectId);
             formData.append("semesterId", semesterId);
@@ -128,22 +135,29 @@ const InputScore = () => {
             console.log("Dữ liệu gửi lên máy chủ:", formData);
             const response = await authApi().post(endpoints["add-score"], formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data", 
+                    "Content-Type": "multipart/form-data",
                 },
             });
 
 
-            if (response.status === 200) {
-                console.log(`Điểm của sinh viên ${studentId} đã được lưu thành công!`);
+            if (response.status === 201) {
+                alert("Lưu thành công");
 
-                setQuatrinh({ ...quatrinh, [studentId]: "" });
+                if (scoreColumnId === 1) {
+                    setQuatrinh({ ...quatrinh, [studentId]: "" });
+                } else if (scoreColumnId === 2) {
+                    setGiuaki({ ...giuaki, [studentId]: "" });
+                } else if (scoreColumnId === 3) {
+                    setCuoiki({ ...cuoiki, [studentId]: "" });
+                }
             } else {
                 console.error(`Lưu điểm của sinh viên ${studentId} thất bại.`);
             }
         } catch (error) {
             console.error(error);
-       }
+        }
     };
+
 
     const getScoreValue = (scoreDto, columnName) => {
         const score = scoreDto.find(item => item.scoreColumnName === columnName);
@@ -183,6 +197,7 @@ const InputScore = () => {
                         ) : (
                             <Button className="btnSubmit" onClick={handleEdit}>Nhập điểm</Button>
                         )}
+                        <Button className="btnSubmit" type="submit">Gửi thông báo</Button>
                     </div>
                 </Form>
                 {studentList.length > 0 && (
@@ -195,8 +210,6 @@ const InputScore = () => {
                                 <th className="text-center">Quá trình</th>
                                 <th className="text-center">Giữa kì</th>
                                 <th className="text-center">Cuối kì</th>
-                                <th></th>
-                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -240,13 +253,7 @@ const InputScore = () => {
                                         )}
                                     </td>
                                     <td>
-                                        <Button onClick={() => SaveScore(student.studentId, studentColumnIds['Quá trình'])}>Lưu điểm QT</Button>
-                                    </td>
-                                    <td>
-                                        <Button onClick={() => SaveScore(student.studentId, studentColumnIds['Giữa kì'])}>Lưu điểm GK</Button>
-                                    </td>
-                                    <td>
-                                        <Button onClick={() => SaveScore(student.studentId, studentColumnIds['Cuối kì'])}>Lưu điểm CK</Button>
+                                        <Button onClick={() => SaveScore(student.studentId, studentColumnIds[selectedScoreColumnName])}>Lưu điểm</Button>
                                     </td>
                                 </tr>
                             ))}

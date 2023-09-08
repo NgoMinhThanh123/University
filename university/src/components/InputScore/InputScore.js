@@ -16,15 +16,11 @@ const InputScore = () => {
     const [giuaki, setGiuaki] = useState({});
     const [cuoiki, setCuoiki] = useState({});
     const [isEditMode, setIsEditMode] = useState(false);
-    const [selectedScoreColumnName, setSelectedScoreColumnName] = useState("Quá trình"); // Default to "Quá trình" or any initial value
     const [studentColumnIds, setStudentColumnIds] = useState({
         'Quá trình': 1,
         'Giữa kì': 2,
         'Cuối kì': 3,
     });
-    const handleScoreColumnChange = (columnName) => {
-        setSelectedScoreColumnName(columnName);
-    };
 
     useEffect(() => {
         async function fetchData() {
@@ -47,7 +43,6 @@ const InputScore = () => {
             const lecturerUsername = user.username;
             const response = await authApi().get(endpoints['get-lecturer-by-username'].replace("{username}", lecturerUsername));
             setSelectedLecturer(response.data);
-            console.log('lecturer info:', response.data);
             return response.data;
         } catch (err) {
             console.error(err);
@@ -58,7 +53,6 @@ const InputScore = () => {
     const fetchSubjectsByLecturerId = async (lecturerId) => {
         try {
             const response = await authApi().get(endpoints["get-subject-by-lecturerId"].replace("{lecturerId}", lecturerId));
-            console.log(response.data);
             setSubjectList(response.data);
 
             const endpoint = endpoints["semester"]
@@ -67,7 +61,6 @@ const InputScore = () => {
             const semesterResponse = await authApi().get(endpoint);
             setSemesterList(semesterResponse.data);
 
-            console.log('Semester info:', semesterResponse.data);
         } catch (error) {
             console.error(error);
             console.log(error);
@@ -91,7 +84,6 @@ const InputScore = () => {
             const subjectId = selectedSubject;
             const lecturerId = selectedLecturer.id;
             const semesterId = selectedSemester;
-            console.log("semesterId", semesterId)
 
             const endpoint = endpoints["get-list-student"]
                 + `?lecturerId=${lecturerId}&subjectId=${subjectId}&semesterId=${semesterId}`;
@@ -110,21 +102,21 @@ const InputScore = () => {
     const handleEdit = () => {
         setIsEditMode(true);
     };
+    const ExitHandleEdit = () => {
+        setIsEditMode(false);
+    };
 
     const SaveScore = async (studentId, scoreColumnId) => {
         try {
             const subjectId = selectedSubject;
             const semesterId = selectedSemester;
 
-            let scoreValue = 0;
+            const scoreValue = parseFloat(
+                scoreColumnId === 1 ? quatrinh[studentId] || 0 :
+                    scoreColumnId === 2 ? giuaki[studentId] || 0 :
+                        cuoiki[studentId] || 0
+            );
 
-            if (scoreColumnId === 1) {
-                scoreValue = parseFloat(quatrinh[studentId] || 0);
-            } else if (scoreColumnId === 2) {
-                scoreValue = parseFloat(giuaki[studentId] || 0);
-            } else if (scoreColumnId === 3) {
-                scoreValue = parseFloat(cuoiki[studentId] || 0);
-            }
             const formData = new FormData();
             formData.append("subjectId", subjectId);
             formData.append("semesterId", semesterId);
@@ -132,7 +124,6 @@ const InputScore = () => {
             formData.append("scoreValue", scoreValue);
             formData.append("scoreColumnId", scoreColumnId);
 
-            console.log("Dữ liệu gửi lên máy chủ:", formData);
             const response = await authApi().post(endpoints["add-score"], formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -141,28 +132,25 @@ const InputScore = () => {
 
 
             if (response.status === 201) {
-                alert("Lưu thành công");
+                alert(`Lưu điểm thành công!`);
 
-                if (scoreColumnId === 1) {
-                    setQuatrinh({ ...quatrinh, [studentId]: "" });
-                } else if (scoreColumnId === 2) {
-                    setGiuaki({ ...giuaki, [studentId]: "" });
-                } else if (scoreColumnId === 3) {
-                    setCuoiki({ ...cuoiki, [studentId]: "" });
-                }
+                setQuatrinh({ ...quatrinh, [studentId]: "" });
+                setQuatrinh({ ...giuaki, [studentId]: "" });
+                setQuatrinh({ ...cuoiki, [studentId]: "" });
             } else {
-                console.error(`Lưu điểm của sinh viên ${studentId} thất bại.`);
+                alert(`Lưu điểm thất bại!!!`);
             }
         } catch (error) {
             console.error(error);
         }
     };
 
-
     const getScoreValue = (scoreDto, columnName) => {
         const score = scoreDto.find(item => item.scoreColumnName === columnName);
         return score ? score.scoreValue : "";
     };
+
+    console.log(studentList);
 
     return (
         <>
@@ -192,12 +180,13 @@ const InputScore = () => {
                             </Form.Group>
                         </div>
                         <Button className="btnSubmit" type="submit">Tìm kiếm</Button>
-                        {isEditMode ? (
-                            <Button className="btnSubmit">Lưu tạm thời</Button>
+                        {isEditMode ? (<>
+                       <Button className="btnSubmit" onClick={ExitHandleEdit}>Thoát</Button>
+                       <Button className="btnSubmit">Gửi mail</Button>
+                            </>
                         ) : (
                             <Button className="btnSubmit" onClick={handleEdit}>Nhập điểm</Button>
                         )}
-                        <Button className="btnSubmit" type="submit">Gửi thông báo</Button>
                     </div>
                 </Form>
                 {studentList.length > 0 && (
@@ -210,7 +199,13 @@ const InputScore = () => {
                                 <th className="text-center">Quá trình</th>
                                 <th className="text-center">Giữa kì</th>
                                 <th className="text-center">Cuối kì</th>
-                                <th></th>
+                                {isEditMode && (
+                                    <>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </>
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -252,9 +247,18 @@ const InputScore = () => {
                                             getScoreValue(student.scoreDto, 'Cuối kì')
                                         )}
                                     </td>
-                                    <td>
-                                        <Button onClick={() => SaveScore(student.studentId, studentColumnIds[selectedScoreColumnName])}>Lưu điểm</Button>
-                                    </td>
+                                    {isEditMode && (<>
+                                        <td>
+                                            <Button onClick={() => SaveScore(student.studentId, studentColumnIds['Quá trình'])}>Lưu điểm QT</Button>
+                                        </td>
+                                        <td>
+                                            <Button onClick={() => SaveScore(student.studentId, studentColumnIds['Giữa kì'])}>Lưu điểm GK</Button>
+                                        </td>
+                                        <td>
+                                            <Button onClick={() => SaveScore(student.studentId, studentColumnIds['Cuối kì'])}>Lưu điểm CK</Button>
+                                        </td>
+                                    </>)}
+
                                 </tr>
                             ))}
                         </tbody>

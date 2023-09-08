@@ -34,6 +34,7 @@ const Post = () => {
     }, [searchKeyword]);
 
     const handleSearch = async () => {
+        console.log("searchKeyword:", searchKeyword); // In ra giá trị searchKeyword để kiểm tra
         try {
             const { data } = await Apis.get(endpoints['posts'], {
                 params: { kw: searchKeyword },
@@ -43,8 +44,6 @@ const Post = () => {
             console.error("Error searching posts:", error);
         }
     };
-
-    console.log(post);
 
     const handleToggleInput = () => {
         setShowInput(!showInput);
@@ -66,7 +65,12 @@ const Post = () => {
 
         process();
     };
-    const currentPosts = post.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = post
+    .filter((p) =>
+        p.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        p.content.toLowerCase().includes(searchKeyword.toLowerCase())
+    )
+    .slice(indexOfFirstPost, indexOfLastPost);
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(post.length / postsPerPage); i++) {
         pageNumbers.push(i);

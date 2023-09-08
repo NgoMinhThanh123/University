@@ -72,27 +72,27 @@ const PostDetail = () => {
             </div>
             <hr />
 
-           
-                    <hr />
-                    <h3 className="comment-title">Bình luận</h3>
 
-                    <Form.Control as="textarea" aria-label="With textarea" value={content} onChange={e => setContent(e.target.value)} placeholder="Nội dung bình luận" />
-                    <Button onClick={addComment} className="mt-2" variant="info">Bình luận</Button>
-                    <hr />
-                    {comment == null && comment.length <= 0 && (
+            <hr />
+            <h3 className="comment-title">Bình luận</h3>
+
+            <Form.Control as="textarea" aria-label="With textarea" value={content} onChange={e => setContent(e.target.value)} placeholder="Nội dung bình luận" />
+            <Button onClick={addComment} className="mt-2" variant="info">Bình luận</Button>
+            <hr />
+            {comment == null && comment.length <= 0 && (
                 <>
-                <h1>Không có bình luận nào</h1>
-                    </>
+                    <h1>Không có bình luận nào</h1>
+                </>
             )}
-                    {comment.map(p => (
-                        <div key={p.id} className="post-container">
-                            <div className="post-row">
-                                <p className="postDetail">{p.userId.username}- {formatDate(p.dateCreated)}</p>
-                                <p>{p.content}</p>
-                            </div>
-                        </div>
-                    ))}
-            
+            {comment.map(p => (
+                <div key={p.id} className="post-container">
+                    <div className="post-row">
+                        <p className="postDetail">{p.userId.username}- {formatDate(p.dateCreated)}</p>
+                        <p>{p.content}</p>
+                    </div>
+                </div>
+            ))}
+
         </div >
     </>
 };

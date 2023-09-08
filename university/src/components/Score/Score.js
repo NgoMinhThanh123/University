@@ -60,9 +60,11 @@ const Score = () => {
                             <tr>
                                 <th>STT</th>
                                 <th>Tên môn học</th>
+                                <th>Số tín chỉ</th>
                                 <th>Quá trình</th>
                                 <th>Giữa kì</th>
                                 <th>Cuối kì</th>
+                                <th>TK</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,17 +72,31 @@ const Score = () => {
                                 <tr key={scoreIndex}>
                                     <td>{scoreIndex + 1}</td>
                                     <td>{score.subjectName}</td>
-                                    {score.scoreDto.length > 0 ? (                                  
-                                    <td>{score.scoreDto[0].scoreColumnName === 'Quá trình' ? score.scoreDto[0].scoreValue || "-" : "-"}</td>
-                                    ) : null}
-                                    {score.scoreDto.length > 0 ? (
-                                    <td>{score.scoreDto[1].scoreColumnName === 'Giữa kì' ? score.scoreDto[1].scoreValue || "-" : "-"}</td>
-                                    ) : null}
-                                    {score.scoreDto.length > 0 ? (
-                                    <td>{score.scoreDto[2].scoreColumnName === 'Cuối kì' ? score.scoreDto[2].scoreValue || "-" : "-"}</td>
-                                    ) : null}
+                                    <td>{score.credit}</td>
+                                    <td>
+                                        {score.scoreDto && score.scoreDto.length > 0 ? (
+                                            score.scoreDto[0].scoreColumnName === 'Quá trình' ? (
+                                                <span>{score.scoreDto[0].scoreValue || "-"}</span>
+                                            ) : null
+                                        ) : null}
+                                    </td>
+                                    <td>
+                                        {score.scoreDto && score.scoreDto.length > 1 ? (
+                                            score.scoreDto[1].scoreColumnName === 'Giữa kì' ? (
+                                                <span>{score.scoreDto[1].scoreValue || "-"}</span>
+                                            ) : null
+                                        ) : null}
+                                    </td>
+                                    <td>
+                                        {score.scoreDto && score.scoreDto.length > 2 ? (
+                                            score.scoreDto[2].scoreColumnName === 'Cuối kì' ? (
+                                                <span>{score.scoreDto[2].scoreValue || "-"}</span>
+                                            ) : null
+                                        ) : null}
+                                    </td>
+                                    <td></td>
                                 </tr>
-                            ))}
+                            ))}                     
                         </tbody>
                     </table>
                 </div>

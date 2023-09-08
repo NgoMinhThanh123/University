@@ -6,6 +6,8 @@ import './Student.css'
 import Papa from 'papaparse';
 import 'jspdf-autotable';
 import jsPDF from 'jspdf';
+import 'jspdf-autotable'; 
+// import CustomFont from '../../public/Roboto-Regular.ttf'; // Điều chỉnh đường dẫn tới font nếu cần
 
 
 const Student = () => {
@@ -19,6 +21,10 @@ const Student = () => {
     const [csvData, setCsvData] = useState([]);
 
     const [err, setErr] = useState("");
+    const doc = new jsPDF();
+    // doc.addFileToVFS('CustomFont.ttf', CustomFont);
+    // doc.addFont('CustomFont.ttf', 'CustomFont', 'normal');
+    // doc.setFont('CustomFont');
 
     useEffect(() => {
         async function fetchData() {
@@ -198,18 +204,26 @@ const Student = () => {
     };
 
     const exportToPDF = () => {
-        const doc = new jsPDF();
 
         // Add content to the PDF
         doc.text('Bảng điểm sinh viên', 10, 10);
 
-        const scoreColumns = Object.keys(studentScores[Object.keys(studentScores)[0]].scores);
+        const studentId = Object.keys(studentScores)[0]; // Lấy mã số sinh viên đầu tiên (hoặc bạn có thể chọn mã số sinh viên khác)
+        const firstStudent = studentScores[studentId]; // Lấy thông tin của sinh viên đó
+        
+        // Trích xuất tên cột điểm từ mảng scores của sinh viên
+        const scoreColumns = firstStudent.scores.map(score => score.column);
+        
+        console.log('scoreColumns:', scoreColumns);
         const header = ["Mã số sinh viên", "Tên sinh viên", ...scoreColumns];
 
         const data = Object.values(studentScores).map(student => [
             student.studentId,
             student.studentName,
-            ...scoreColumns.map(column => student.scores[column])
+            ...scoreColumns.map(column => {
+                const score = student.scores.find(s => s.column === column);
+                return score ? score.value : '';
+            })
         ]);
 
         doc.autoTable({

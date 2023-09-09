@@ -7,24 +7,18 @@ import Papa from 'papaparse';
 import 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable'; 
-// import CustomFont from '../../public/Roboto-Regular.ttf'; // Điều chỉnh đường dẫn tới font nếu cần
+import CustomFont from './font-times-new-roman.ttf'; 
 
 
 const Student = () => {
     const [user] = useContext(MyUserContext);
-    const [subjectList, setSubjectList] = useState([]); // Danh sách các môn học (danh sách các tên)
-    const [selectedSubject, setSelectedSubject] = useState(""); // Môn học được chọn
+    const [subjectList, setSubjectList] = useState([]);
+    const [selectedSubject, setSelectedSubject] = useState(""); 
     const [selectedLecturer, setSelectedLecturer] = useState({});
     const [studentList, setStudentList] = useState([]);
     const [semesterList, setSemesterList] = useState([]);
     const [selectedSemester, setSelectedSemester] = useState("");
     const [csvData, setCsvData] = useState([]);
-
-    const [err, setErr] = useState("");
-    const doc = new jsPDF();
-    // doc.addFileToVFS('CustomFont.ttf', CustomFont);
-    // doc.addFont('CustomFont.ttf', 'CustomFont', 'normal');
-    // doc.setFont('CustomFont');
 
     useEffect(() => {
         async function fetchData() {
@@ -35,7 +29,7 @@ const Student = () => {
                     await fetchSubjectsByLecturerId(lecturerId);
                 }
             } catch (err) {
-                setErr(true);
+                console.error(err);
             }
         }
 
@@ -50,7 +44,7 @@ const Student = () => {
             console.log('lecturer info:', response.data);
             return response.data;
         } catch (err) {
-            setErr(true);
+            console.error(err);
             return null;
         }
     }
@@ -204,7 +198,10 @@ const Student = () => {
     };
 
     const exportToPDF = () => {
-
+        const doc = new jsPDF();
+        doc.addFileToVFS('CustomFont.ttf', CustomFont);
+        doc.addFont('CustomFont.ttf', 'CustomFont', 'normal');
+        doc.setFont('CustomFont');
         // Add content to the PDF
         doc.text('Bảng điểm sinh viên', 10, 10);
 
@@ -234,6 +231,21 @@ const Student = () => {
         // Save the PDF
         doc.save('student_scores.pdf');
     };
+
+    const modifiedCsvData = csvData.map((row, rowIndex) => {
+    if (rowIndex === 0) {
+        // Nếu là hàng đầu tiên, không cần thay đổi
+        return row;
+    } else {
+        // Tách cột "Giữa kìCuối kì" thành hai cột "Giữa kì" và "Cuối kì"
+        const [giauaki, cuoiki] = row['Giữa kìCuối kì'].split(''); // Điều này giả định rằng giữa kì và cuối kì được tách bằng dấu cách
+        return {
+            ...row,
+            'Giữa kì': giauaki,
+            'Cuối kì': cuoiki,
+        };
+    }
+});
 
     return (
         <>
@@ -290,7 +302,9 @@ const Student = () => {
                                 <thead>
                                     <tr>
                                         {Object.keys(csvData[0]).map((column, index) => (
+                                            <>
                                             <th key={index} className="text-center">{column}</th>
+                                            </>
                                         ))}
                                     </tr>
                                 </thead>

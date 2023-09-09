@@ -6,10 +6,6 @@ package com.nmt.service;
 
 import com.nmt.request.MailRequest;
 
-/**
- *
- * @author acer
- */
 public interface MailService {
-//    void sendMailToStudent(MailRequest mailRequest);
+    void sendMailToStudent(MailRequest mailRequest);
 }

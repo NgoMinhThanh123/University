@@ -8,12 +8,17 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Properties;
+import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,12 +44,12 @@ import utils.CSVUtils;
     "com.nmt.service"
 })
 @Order(2)
-public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfig extends WebSecurityConfigurerAdapter implements AsyncConfigurer {
+
     @Autowired
     private Environment env;
     @Autowired
     private UserDetailsService userDetailsService;
-   
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -63,15 +68,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/login")
                 .usernameParameter("username")
                 .passwordParameter("password");
-        
+
         http.formLogin().defaultSuccessUrl("/")
                 .failureUrl("/login?error");
-        
+
         http.logout().logoutSuccessUrl("/login");
-        
+
         http.exceptionHandling()
                 .accessDeniedPage("/login?accessDenied");
-        
+
         http.authorizeRequests().antMatchers("/login").permitAll();
 //
 //              .antMatchers("/add_class")              
@@ -82,19 +87,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //              .access("hasRole('ROLE_GIAOVU')")
 //                .antMatchers("/update_major/{id}")              
 //            .access("hasRole('ROLE_GIAOVU')");
-                
+
 //        .antMatchers("/**/pay")
 //                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
         http.csrf().disable();
         http.cors().disable();
     }
-    
-    
+
     @Bean
     public SimpleDateFormat simpleDateFormat() {
         return new SimpleDateFormat("yyyy-MM-dd");
     }
-    
+
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary
@@ -105,7 +109,25 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "secure", true));
         return cloudinary;
     }
-    
+
+    @Bean
+    public JavaMailSender javaMailSender() throws MessagingException {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(env.getProperty("spring.mail.host"));
+        mailSender.setPort(Integer.parseInt(env.getProperty("spring.mail.port")));
+        mailSender.setUsername(env.getProperty("spring.mail.username"));
+        mailSender.setPassword(env.getProperty("spring.mail.password"));
+        mailSender.setProtocol(env.getProperty("spring.mail.protocol"));
+
+        Properties props = new Properties();
+        props.put("mail.transport.protocol", env.getProperty("spring.mail.properties.mail.transport.protocol"));
+        props.put("mail.smtp.auth", Boolean.parseBoolean(env.getProperty("spring.mail.properties.mail.smtps.auth")));
+        props.put("mail.smtp.starttls.enable", Boolean.parseBoolean(env.getProperty("spring.mail.properties.mail.smtps.starttls.enable")));
+        mailSender.setJavaMailProperties(props);
+
+        return mailSender;
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -117,7 +139,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    
+
     @Bean
     public CSVUtils csvExporter() {
         return new CSVUtils();

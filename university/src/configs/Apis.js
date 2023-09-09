@@ -2,7 +2,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = "/University";
-const SERVER = "http://localhost:8080";
+const SERVER = "http://localhost:8082";
 
 export const endpoints = {
     // "subjects": `${SERVER_CONTEXT}/api/subjects/`,
@@ -29,6 +29,7 @@ export const endpoints = {
     "comments":`${SERVER_CONTEXT}/api/posts/{id}/comments/`,
     "add-comment": `${SERVER_CONTEXT}/api/comments/`,
     "add-post": `${SERVER_CONTEXT}/api/add-post/`,
+    "send-mail": `${SERVER_CONTEXT}/api/students/mails/`,
 }
 
 export const authApi = () => {

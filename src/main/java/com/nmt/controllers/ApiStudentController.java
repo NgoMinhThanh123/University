@@ -5,10 +5,12 @@
 package com.nmt.controllers;
 
 import com.nmt.model.Student;
+import com.nmt.model.Subject;
 import com.nmt.request.MailRequest;
 import com.nmt.request.RequestMailToStudent;
 import com.nmt.service.MailService;
 import com.nmt.service.StudentService;
+import com.nmt.service.SubjectService;
 import com.nmt.service.UserService;
 import dto.StuScoreDto;
 import dto.StudentDto;
@@ -43,11 +45,13 @@ public class ApiStudentController {
     @Autowired
     private StudentService studentService;
     @Autowired
+    private SubjectService subjectService;
+    @Autowired
     private UserService userService;
-//    @Autowired
-//    private MailService mailService;
-//    @Autowired
-//    private JavaMailSender mailSender;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @DeleteMapping("/update_student/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -94,26 +98,28 @@ public class ApiStudentController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     
-//     @PostMapping("/students/mails/")
-//    public ResponseEntity<?> sendMailToStudent(@RequestBody RequestMailToStudent requestMail, 
-//            @RequestParam String lecturerId,
-//            @RequestParam String subjectId,      
-//            @RequestParam String semesterId) {
-//        String subject = requestMail.getSubject();
-//        String body = HTMLConverter.convertToHTML(requestMail.getBody());
-//        String from = requestMail.getFrom();
-//        List<String> listMail = studentService.getAllMailOfStudent(lecturerId, subjectId, semesterId);
-//        listMail.stream().forEach(m -> {
-//            MailRequest mailRequest = MailRequest.builder()
-//                    .date(LocalDate.now().format(DateTimeFormatter.ofPattern(YYYY_MM_DD)))
-//                    .body(body)
-//                    .subject(subject)
-//                    .from(from)
-//                    .recipients(m)
-//                    .build();
-//            mailService.sendMailToStudent(mailRequest);
-//        });
-//        return ResponseEntity.ok("Send mail to group successfully!");
-//    }
+     @PostMapping("/students/mails/")
+     @CrossOrigin
+    public ResponseEntity<?> sendMailToStudent(
+            @RequestParam String lecturerId,
+            @RequestParam String subjectId,      
+            @RequestParam String semesterId) {
+        Subject s = this.subjectService.getSubjectById(subjectId);
+        String subject = "Đã có điểm môn học";
+        String body = "Đã có điểm môn học " + s.getName() + ", các em vào xem nhé!!!";
+        String from = "2051052127thanh@ou.edu.vn";
+        List<String> listMail = studentService.getAllMailOfStudent(lecturerId, subjectId, semesterId);
+        listMail.stream().forEach(m -> {
+            MailRequest mailRequest = MailRequest.builder()
+                    .date(LocalDate.now().format(DateTimeFormatter.ofPattern(YYYY_MM_DD)))
+                    .body(body)
+                    .subject(subject)
+                    .from(from)
+                    .recipients(m)
+                    .build();
+            mailService.sendMailToStudent(mailRequest);
+        });
+        return ResponseEntity.ok("Send mail to group successfully!");
+    }
     
 }

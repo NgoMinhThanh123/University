@@ -19,6 +19,7 @@ const Student = () => {
     const [semesterList, setSemesterList] = useState([]);
     const [selectedSemester, setSelectedSemester] = useState("");
     const [csvData, setCsvData] = useState([]);
+    
 
     useEffect(() => {
         async function fetchData() {
@@ -232,20 +233,29 @@ const Student = () => {
         doc.save('student_scores.pdf');
     };
 
-    const modifiedCsvData = csvData.map((row, rowIndex) => {
-    if (rowIndex === 0) {
-        // Nếu là hàng đầu tiên, không cần thay đổi
-        return row;
-    } else {
-        // Tách cột "Giữa kìCuối kì" thành hai cột "Giữa kì" và "Cuối kì"
-        const [giauaki, cuoiki] = row['Giữa kìCuối kì'].split(''); // Điều này giả định rằng giữa kì và cuối kì được tách bằng dấu cách
-        return {
-            ...row,
-            'Giữa kì': giauaki,
-            'Cuối kì': cuoiki,
-        };
+    const handleSendMail = async() => {
+        try {
+            const lecturerId = selectedLecturer.id;
+            const subjectId = selectedSubject;
+            const semesterId = selectedSemester;
+            console.log("semesterId", semesterId)
+
+            const endpoint = endpoints["send-mail"]
+                + `?lecturerId=${lecturerId}&subjectId=${subjectId}&semesterId=${semesterId}`;
+
+            const response = await authApi().get(endpoint);
+
+            if (response.code === 200) {
+                alert("Gửi mail thành công")
+                
+            }else{
+                alert("Đã có lỗi xảy ra, vui lòng thử lại sau!");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
-});
+
 
     return (
         <>

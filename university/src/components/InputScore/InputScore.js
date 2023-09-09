@@ -150,7 +150,34 @@ const InputScore = () => {
         return score ? score.scoreValue : "";
     };
 
-    console.log(studentList);
+    const handleSendMail = async() => {
+        try {
+            const lecturerId = selectedLecturer.id;
+            const subjectId = selectedSubject;
+            const semesterId = selectedSemester;
+
+            console.log("semesterId", semesterId)
+
+            const endpoint = endpoints["send-mail"]
+                + `?lecturerId=${lecturerId}&subjectId=${subjectId}&semesterId=${semesterId}`;
+            
+            console.log(endpoint);
+
+            const response = await authApi().post(endpoint);
+            console.log("response code: " + response);
+
+
+            if (response.status === 200) {
+                alert("Gửi mail thành công")
+                
+            }else{
+                alert("Đã có lỗi xảy ra, vui lòng thử lại sau!");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
 
     return (
         <>
@@ -182,7 +209,7 @@ const InputScore = () => {
                         <Button className="btnSubmit" type="submit">Tìm kiếm</Button>
                         {isEditMode ? (<>
                        <Button className="btnSubmit" onClick={ExitHandleEdit}>Thoát</Button>
-                       <Button className="btnSubmit">Gửi mail</Button>
+                       <Button className="btnSubmit" onClick={handleSendMail}>Gửi mail</Button>
                             </>
                         ) : (
                             <Button className="btnSubmit" onClick={handleEdit}>Nhập điểm</Button>

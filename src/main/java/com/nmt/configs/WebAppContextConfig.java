@@ -49,29 +49,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 })
 @PropertySource("classpath:configs.properties")
 public class WebAppContextConfig implements WebMvcConfigurer {
-//    @Value("${spring.mail.port}")
-//    private int port;
-//    @Value("${spring.mail.host}")
-//    private String host;
-//    @Value("${spring.mail.username}")
-//    private String username;
-//    @Value("${spring.mail.password}")
-//    private String password;
-//    @Value("${spring.mail.protocol}")
-//    private String protocol;
-//    @Value("${spring.mail.properties.mail.transport.protocol}")
-//    private String transportProtocol;
-//    @Value("${spring.mail.properties.mail.smtps.auth}")
-//    private boolean auth;
-//    @Value("${spring.mail.properties.mail.smtps.starttls.enable}")
-//    private boolean starttlsEnable;
-//    @Value("${spring.mail.properties.mail.smtps.timeout}")
-//    private int timeout;
     
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+    
     
     @Override
     public void addFormatters(FormatterRegistry registry) {
@@ -115,22 +98,4 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/resources/js/");
     }
     
-//    @Bean
-//    public JavaMailSender javaMailSender() throws MessagingException {
-//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//        mailSender.setHost(host);
-//        mailSender.setPort(port);
-//
-//        mailSender.setUsername(username);
-//        mailSender.setPassword(password);
-//        mailSender.setProtocol(protocol);
-//
-//        Properties props = new Properties();
-//        props.put("mail.transport.protocol", transportProtocol);
-//        props.put("mail.smtp.auth", auth);
-//        props.put("mail.smtp.starttls.enable", starttlsEnable);
-//        mailSender.setJavaMailProperties(props);
-//
-//        return mailSender;
-//    }
 }

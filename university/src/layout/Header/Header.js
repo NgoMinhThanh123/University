@@ -17,7 +17,7 @@ const Header = () => {
     <>
       <Navbar expand="lg" className="back-ground">
         <Container>
-          <Navbar.Brand style={{color:"black"}} ><img class="default-logo dark-version" alt="TRƯỜNG ĐẠI HỌC MỞ TP HCM" src="https://ou.edu.vn/wp-content/uploads/2016/08/Logo.png" style={{height: "79px"}} /></Navbar.Brand>
+          <Navbar.Brand style={{color:"black"}} ><img className="default-logo dark-version" alt="TRƯỜNG ĐẠI HỌC MỞ TP HCM" src="https://ou.edu.vn/wp-content/uploads/2016/08/Logo.png" style={{height: "79px"}} /></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">

@@ -239,10 +239,53 @@ public class StudentRepositoryImpl implements StudentRepository {
                 + "join lecturer_subject on lecturer_subject.subject_id = subject.id\n"
                 + "join lecturer on lecturer_subject.lecturer_id = lecturer.id\n"
                 + "where lecturer.id = :lecturerId and subject.id = :subjectId and semester.id = :semesterId");
-            q.setParameter("lecturerId", lecturerId);
-            q.setParameter("subjectId", subjectId);
-            q.setParameter("semesterId", semesterId);
+        q.setParameter("lecturerId", lecturerId);
+        q.setParameter("subjectId", subjectId);
+        q.setParameter("semesterId", semesterId);
         return q.getResultList();
+    }
+
+    @Override
+    public List<Student> getStudentByHomeroomTeacher(String lecturerId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        List<Student> students = new ArrayList<>();
+        List<Object[]> objects = new ArrayList<>();
+
+        try {
+            String sql = "SELECT student.* \n"
+                    + "FROM student\n"
+                    + "join classes on student.classes_id = classes.id\n"
+                    + "join lecturer on classes.id = lecturer.classes_id\n"
+                    + "where lecturer.id = :lecturerId";
+
+            Query query = s.createNativeQuery(sql);
+            query.setParameter("lecturerId", lecturerId);
+
+            objects = query.getResultList();
+            for (int i = 0; i < objects.size(); i++) {
+                Student student = new Student();
+                User u = this.userRepo.getUserById(Integer.parseInt(objects.get(i)[6].toString()));
+                Classes c = this.classesRepo.getClassById(objects.get(i)[7].toString());
+                Faculty f = this.falRepo.getFacultyById(objects.get(i)[8].toString());
+                Major m = this.majorRepo.getMajorById(objects.get(i)[9].toString());
+                student.setId(objects.get(i)[0].toString());
+                student.setName(objects.get(i)[1].toString());
+                student.setBirthday((Date) objects.get(i)[2]);
+                student.setGender(Short.parseShort(objects.get(i)[3].toString()));
+                student.setPhone(objects.get(i)[4].toString());
+                student.setAddress(objects.get(i)[5].toString());
+                student.setUserId(u);
+                student.setClassesId(c);
+                student.setFacultyId(f);
+                student.setMajorId(m);
+
+                students.add(student);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return students;
     }
 
 }

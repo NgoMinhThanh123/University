@@ -98,5 +98,10 @@ public class StudentServiceImpl implements StudentService{
     public List<String> getAllMailOfStudent(String lecturerId, String subjectId, String semesterId) {
         return this.studentRepo.getAllMailOfStudent(lecturerId, subjectId, semesterId);
     }
+
+    @Override
+    public List<Student> getStudentByHomeroomTeacher(String lecturerId) {
+        return this.studentRepo.getStudentByHomeroomTeacher(lecturerId);
+    }
     
 }

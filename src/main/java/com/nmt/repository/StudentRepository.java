@@ -20,6 +20,7 @@ public interface StudentRepository {
     boolean updateStudent(Student c);
     Student getStudentById(String id);
     Student getStudentByUsername(String username);
+    List<Student> getStudentByHomeroomTeacher(String lecturerId);
     boolean deleteStudent(String id);
     List<Student> getListStudent(String lecturerId, String subjectId, String semesterID);
     List<String> getAllMailOfStudent(String lecturerId, String subjectId, String semesterId);

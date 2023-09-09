@@ -233,29 +233,6 @@ const Student = () => {
         doc.save('student_scores.pdf');
     };
 
-    const handleSendMail = async() => {
-        try {
-            const lecturerId = selectedLecturer.id;
-            const subjectId = selectedSubject;
-            const semesterId = selectedSemester;
-            console.log("semesterId", semesterId)
-
-            const endpoint = endpoints["send-mail"]
-                + `?lecturerId=${lecturerId}&subjectId=${subjectId}&semesterId=${semesterId}`;
-
-            const response = await authApi().get(endpoint);
-
-            if (response.code === 200) {
-                alert("Gửi mail thành công")
-                
-            }else{
-                alert("Đã có lỗi xảy ra, vui lòng thử lại sau!");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
 
     return (
         <>

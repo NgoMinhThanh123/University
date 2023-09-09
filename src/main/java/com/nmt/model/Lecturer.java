@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -88,6 +89,9 @@ public class Lecturer implements Serializable {
     @ManyToOne(optional = false)
     @JsonIgnore
     private User userId;
+    @JoinColumn(name = "classes_id", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private Classes classesId;
 
     public Lecturer() {
     }

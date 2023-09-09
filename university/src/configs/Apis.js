@@ -15,6 +15,7 @@ export const endpoints = {
     "get-user": `${SERVER_CONTEXT}/api/users/{username}/`,
     "user-id": `${SERVER_CONTEXT}/api/users-id/{id}/`,
     "get-student-by-username": `${SERVER_CONTEXT}/api/students-un/{username}/`,
+    "student-home-room-teacher": `${SERVER_CONTEXT}/api/students-lecturer/{lecturerId}/`,
     "get-lecturer-by-username": `${SERVER_CONTEXT}/api/lecturers-un/{username}/`,
     "get-list-student": `${SERVER_CONTEXT}/api/get-list-student/`,
     "get-subject-by-lecturerId": `${SERVER_CONTEXT}/api/subjects/{lecturerId}/`,

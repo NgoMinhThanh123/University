@@ -14,6 +14,7 @@ import Student from "./components/Student/Student";
 import InputScore from "./components/InputScore/InputScore";
 import Post from "./components/Forum/Post";
 import PostDetail from "./components/Forum/PostDetail";
+import HomeRoomTeacher from "./components/HomeRoomTeacher/HomeRoomTeacher";
 
 export const MyUserContext = createContext();
 
@@ -46,6 +47,7 @@ export const useUser = () => useContext(MyUserContext);
           <Route path="/chat" element={ <ProtectedRoute><BaseLayout><HomeChat /></BaseLayout></ProtectedRoute>} />
           <Route path="/score" element={ <ProtectedRoute><BaseLayout><Score /></BaseLayout></ProtectedRoute>} />
           <Route path="/student" element={ <ProtectedRoute><BaseLayout><Student /></BaseLayout></ProtectedRoute>} />
+          <Route path="/homeroom-teacher" element={ <ProtectedRoute><BaseLayout><HomeRoomTeacher /></BaseLayout></ProtectedRoute>} />
           <Route path="/profile" element={ <ProtectedRoute><BaseLayout><Profile /></BaseLayout></ProtectedRoute>} />
           <Route path="/input-score" element={ <ProtectedRoute><BaseLayout><InputScore /></BaseLayout></ProtectedRoute>} />
           <Route path="/posts" element={ <ProtectedRoute><BaseLayout><Post /></BaseLayout></ProtectedRoute>} />

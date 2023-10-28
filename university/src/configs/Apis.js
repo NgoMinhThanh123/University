@@ -2,7 +2,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = "/University";
-const SERVER = "http://localhost:8082";
+const SERVER = "http://localhost:8080";
 
 export const endpoints = {
     // "subjects": `${SERVER_CONTEXT}/api/subjects/`,
